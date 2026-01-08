@@ -57,6 +57,7 @@ Project ini dibangun menggunakan **HTML, CSS, dan JavaScript murni** tanpa frame
 
 Struktur folder dibuat sederhana agar mudah dipahami dan dikembangkan.
 
+```text
 admin-panel-template/
 ├── 📂 assets/
 │   ├── 📂 css/
