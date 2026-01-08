@@ -54,7 +54,7 @@ Project ini dibangun menggunakan **HTML, CSS, dan JavaScript murni** tanpa frame
 
 ---
 
-## 📁 Struktur Folder
+## Struktur Folder
 
 Struktur folder dibuat sederhana agar mudah dipahami dan dikembangkan.
 
@@ -62,24 +62,15 @@ Struktur folder dibuat sederhana agar mudah dipahami dan dikembangkan.
 admin-panel-template/
 ├── 📂 assets/
 │   ├── 📂 css/
-│   │   ├── style.css
-│   │   └── responsive.css
+│   │   ├── core.css
 │   ├── 📂 js/
 │   │   ├── main.js
-│   │   ├── sidebar.js
-│   │   ├── datatable-init.js
-│   │   └── form-validation.js
 │   └── 📂 lib/
 │       ├── 📂 bootstrap/
 │       ├── 📂 remixicon/
 │       ├── 📂 sweetalert2/
 │       ├── 📂 select2/
 │       └── 📂 datatables/
-├── 📂 pages/
-│   ├── dashboard.html
-│   ├── tables.html
-│   ├── forms.html
-│   └── settings.html
 ├── 📂 partials/
 │   ├── sidebar.html
 │   ├── navbar.html
