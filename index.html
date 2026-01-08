@@ -3,9 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Simple Dashboard</title>
+
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css">\
+
+    <!-- Remix Icon -->
+    <link rel="stylesheet" href="assets/libs/remixicon/remixicon.css">
+
+    <!-- Costume CSS -->
+    <link rel="stylesheet" href="assets/css/core.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --sidebar-width: 250px;
+            --header-height: 60px;
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f5f7fb;
+            overflow-x: hidden;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        .dashboard-header {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: var(--header-height);
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            transition: left var(--transition-speed) ease;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .mobile-menu-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Sidebar Styles */
+        .dashboard-sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 200;
+            transition: transform var(--transition-speed) ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-logo {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-logo-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .sidebar-logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            white-space: nowrap;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+            flex-grow: 1;
+        }
+        
+        .menu-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            padding: 15px 20px 5px;
+            letter-spacing: 0.5px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            color: var(--primary-color);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .menu-item i {
+            font-size: 1.2rem;
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .menu-text {
+            font-weight: 500;
+        }
+        
+        .menu-badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+        }
+        
+        /* Main Content Styles */
+        .dashboard-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 30px;
+            transition: all var(--transition-speed) ease;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        /* Content Message Box */
+        .content-box {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .message-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #495057;
+            margin-bottom: 25px;
+        }
+        
+        .highlight {
+            background-color: rgba(67, 97, 238, 0.1);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        /* Custom utilities */
+        .cursor-pointer {
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard-header {
+                left: 0;
+            }
+            
+            .dashboard-sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .dashboard-sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .dashboard-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 150;
+                display: none;
+            }
+            
+            .overlay.active {
+                display: block;
+            }
+            
+            .content-box {
+                padding: 25px;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dashboard-content {
+                padding: 15px;
+            }
+            
+            .welcome-title {
+                font-size: 1.7rem;
+            }
+            
+            .message-text {
+                font-size: 1.1rem;
+            }
+            
+            .content-box {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="dashboard-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <i class="ri-home-4-line sidebar-logo-icon"></i>
+                <span class="sidebar-logo-text">MyDashboard</span>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-title">Navigation</div>
+                <a href="#" class="menu-item active">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-user-line"></i>
+                    <span class="menu-text">Profile</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-mail-line"></i>
+                    <span class="menu-text">Messages</span>
+                    <span class="badge bg-primary menu-badge">5</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-file-text-line"></i>
+                    <span class="menu-text">Documents</span>
+                </a>
+                
+                <div class="menu-title mt-4">Settings</div>
+                <a href="#" class="menu-item">
+                    <i class="ri-settings-3-line"></i>
+                    <span class="menu-text">Account Settings</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-shield-keyhole-line"></i>
+                    <span class="menu-text">Privacy</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="menu-text">Notifications</span>
+                </a>
+                
+                <div class="menu-title mt-4">Help</div>
+                <a href="#" class="menu-item">
+                    <i class="ri-question-line"></i>
+                    <span class="menu-text">Help Center</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-information-line"></i>
+                    <span class="menu-text">About</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="ri-customer-service-line"></i>
+                    <span class="menu-text">Contact Us</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Header -->
+        <header class="dashboard-header" id="header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="ri-menu-line"></i>
+            </button>
+            
+            <div class="header-controls">
+                <div class="position-relative">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button">
+                        <i class="ri-notification-line fs-5"></i>
+                    </button>
+                    <span class="notification-badge">2</span>
+                </div>
+                
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-settings-3-line fs-5"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-lock-line me-2"></i> Security</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dropdown">
+                    <div class="user-avatar cursor-pointer" data-bs-toggle="dropdown">
+                        <i class="ri-user-line"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text fw-bold">Ahmad Rizki</span></li>
+                        <li><span class="dropdown-item-text text-muted">User Dashboard</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line me-2"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Overlay for mobile -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- Main Content -->
+        <main class="dashboard-content" id="mainContent">
+            <div class="content-box">
+                <h1 class="welcome-title">Selamat Datang!</h1>
+                <p class="message-text">
+                    Dashboard ini telah dioptimalkan dengan <span class="highlight">struktur yang lebih praktis</span>. 
+                    Logo hanya ada di sidebar, dan header hanya berisi kontrol navigasi. 
+                    Pada tampilan mobile, sidebar disembunyikan dan dapat diaktifkan dengan tombol menu.
+                </p>
+                <p class="message-text">
+                    Silakan jelajahi menu di sidebar untuk mengakses berbagai fitur dashboard.
+                </p>
+                
+                <div class="mt-4 p-3 bg-light rounded">
+                    <h5>Fitur yang diterapkan:</h5>
+                    <ul class="mb-0">
+                        <li>Logo hanya di sidebar</li>
+                        <li>Sidebar aktif di desktop secara default</li>
+                        <li>Tombol hamburger menu di header untuk mobile/tablet</li>
+                        <li>CSS dan JS yang efektif dan efisien</li>
+                        <li>Kelas CSS yang reusable</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Dashboard Module
+        const Dashboard = (function() {
+            // DOM Elements
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            // Initialize
+            function init() {
+                setupEventListeners();
+                setActiveMenuItem();
+            }
+            
+            // Event Listeners
+            function setupEventListeners() {
+                // Mobile menu toggle
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.addEventListener('click', toggleSidebar);
+                }
+                
+                // Overlay click to close sidebar
+                if (overlay) {
+                    overlay.addEventListener('click', closeSidebar);
+                }
+                
+                // Menu item click
+                menuItems.forEach(item => {
+                    item.addEventListener('click', handleMenuItemClick);
+                });
+                
+                // Close sidebar on window resize if needed
+                window.addEventListener('resize', handleResize);
+            }
+            
+            // Sidebar Functions
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
+            
+            function openSidebar() {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+            }
+            
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+            
+            // Menu Item Functions
+            function handleMenuItemClick(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                menuItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Close sidebar on mobile after selection
+                if (window.innerWidth < 992) {
+                    closeSidebar();
+                }
+            }
+            
+            function setActiveMenuItem() {
+                // Set first menu item as active by default
+                if (menuItems.length > 0 && !document.querySelector('.menu-item.active')) {
+                    menuItems[0].classList.add('active');
+                }
+            }
+            
+            // Window Resize Handler
+            function handleResize() {
+                if (window.innerWidth >= 992) {
+                    // On desktop, ensure sidebar is visible
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            }
+            
+            // Public API
+            return {
+                init,
+                toggleSidebar,
+                openSidebar,
+                closeSidebar
+            };
+        })();
+        
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            Dashboard.init();
+        });
+    </script>
 </body>
 </html>

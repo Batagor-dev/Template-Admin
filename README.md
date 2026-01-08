@@ -1,4 +1,4 @@
-# 🧩 Admin Panel Template
+# Admin Panel Template
 
 Template **Admin Panel** modern dan ringan berbasis **Bootstrap 5**, dirancang untuk mempercepat pembuatan dashboard admin dengan tampilan profesional, responsif, dan mudah dikembangkan.
 
@@ -6,7 +6,7 @@ Project ini fokus pada **kesederhanaan, konsistensi UI, dan kemudahan integrasi 
 
 ---
 
-## 🎯 Tujuan Project
+## Tujuan Project
 
 - Menyediakan template admin panel siap pakai
 - Mempercepat proses development dashboard
@@ -15,7 +15,7 @@ Project ini fokus pada **kesederhanaan, konsistensi UI, dan kemudahan integrasi 
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 
 - Layout admin panel responsif
 - Sidebar & Navbar siap pakai
@@ -26,20 +26,20 @@ Project ini fokus pada **kesederhanaan, konsistensi UI, dan kemudahan integrasi 
 
 ---
 
-## 🧪 Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 Project ini dibangun menggunakan **HTML, CSS, dan JavaScript murni** tanpa framework frontend berat.
 
-### 🧱 Core
+### Core
 
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width="20"/> **Bootstrap 5**  
+- ![Bootstrap](https://img.shields.io/badge/Bootstrap-5%20Framework-7952B3)
   Framework utama untuk layout, grid system, komponen UI, dan responsivitas.
 
 ---
 
-### 🎨 UI & UX
+### UI & UX
 
-- <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/remixicon.svg" width="20"/> **Remix Icon**  
+- ![Remix Icon](https://img.shields.io/badge/Remix%20Icon-Icon%20Library-5865f2)
   Icon modern dan konsisten untuk dashboard.
 
 - ![SweetAlert2](https://img.shields.io/badge/SweetAlert2-Alerts-red)  

@@ -1,0 +1,10 @@
+body {
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+}
+
+h1 { font-weight: 700; }
+h2 { font-weight: 600; }
+p  { font-weight: 400; }
+small { font-weight: 400; }
+a { font-weight: 500; }
