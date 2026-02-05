@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Elements - TechArea Production Dashboard</title>
+
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 (Hanya untuk grid system dan utilities) -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css">
+
+    <!-- Remix Icon -->
+    <link rel="stylesheet" href="assets/libs/remixicon/remixicon.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/core.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        
+        <!-- ==================== SIDEBAR ==================== -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/img/logo/logo-techarea.png" alt="Techarea Production">
+                <span>Techarea Production</span>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-title">Main Navigation</div>
+                <a href="index.html" class="menu-item" data-menu="dashboard">
+                    <i class="ri-dashboard-line icon-fixed-size"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                
+                <!-- Forms Dropdown Menu -->
+                <div class="menu-item has-dropdown active" data-menu="forms">
+                    <i class="ri-file-text-line icon-fixed-size"></i>
+                    <span class="menu-text">Forms</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu open" id="submenu-forms">
+                    <a href="form-element.html" class="submenu-item active">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Form Elements</span>
+                    </a>
+                    <a href="form-layout.html" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Form Layouts</span>
+                    </a>
+                </div>
+                
+                <a href="datatables.html" class="menu-item" data-menu="analytics">
+                    <i class="ri-table-line icon-fixed-size"></i>
+                    <span class="menu-text">Datatables</span>
+                </a>
+
+                <a href="select2.html" class="menu-item" data-menu="analytics">
+                    <i class="ri-arrow-down-s-line icon-fixed-size"></i>
+                    <span class="menu-text">Select2</span>
+                </a>
+                
+                <!-- Users Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="users">
+                    <i class="ri-group-line icon-fixed-size"></i>
+                    <span class="menu-text">Users</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-users">
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">All Users</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Add New</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">User Roles</span>
+                    </a> 
+                </div>
+                
+                <div class="menu-title mt-4">Settings</div>
+                
+                <a href="#" class="menu-item" data-menu="settings">
+                    <i class="ri-settings-3-line icon-fixed-size"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+                
+                <!-- Appearance Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="appearance">
+                    <i class="ri-palette-line icon-fixed-size"></i>
+                    <span class="menu-text">Appearance</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-appearance">
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Themes</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Custom CSS</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Widgets</span>
+                    </a>
+                </div>
+                
+                <div class="menu-title mt-4">Support</div>
+                
+                <a href="#" class="menu-item" data-menu="help">
+                    <i class="ri-question-line icon-fixed-size"></i>
+                    <span class="menu-text">Help Center</span>
+                </a>
+                
+                <div class="mt-auto p-4 text-center">
+                    <small class="text-muted">v2.1.0</small>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- ==================== HEADER ==================== -->
+        <header class="dashboard-header" id="header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="ri-menu-2-line icon-fixed-size"></i>
+            </button>
+            
+            <div class="header-controls">
+                <!-- Notification Dropdown -->
+                <div class="position-relative">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-notification-3-line icon-fixed-size"></i>
+                    </button>
+                    <span class="notification-badge">3</span>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text fw-bold">New notifications</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-add-line icon-fixed-size icon-fixed-size-sm me-2"></i> New user registered</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-download-line icon-fixed-size icon-fixed-size-sm me-2"></i> Report generated</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-alert-line icon-fixed-size icon-fixed-size-sm me-2"></i> System update</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Settings Dropdown -->
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-settings-4-line icon-fixed-size"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-lock-line icon-fixed-size icon-fixed-size-sm me-2"></i> Security</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+                
+                <!-- User Avatar Dropdown -->
+                <div class="dropdown">
+                    <div class="user-avatar cursor-pointer" data-bs-toggle="dropdown">
+                        <img src="assets/img/avatar/no-img.jpeg" alt="User Avatar">
+                    </div>
+                    <div class="avatar-status"></div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <div class="dropdown-user-header">
+                                <div class="dropdown-user-avatar">
+                                    <img src="assets/img/avatar/no-img.jpeg" alt="Ahmad Rizki">
+                                </div>
+                                <div class="dropdown-user-info">
+                                    <span class="user-name">Ahmad Rizki</span>
+                                    <span class="user-role">Administrator</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-settings-3-line icon-fixed-size icon-fixed-size-sm me-2"></i> Account Settings</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-shield-keyhole-line icon-fixed-size icon-fixed-size-sm me-2"></i> Privacy</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item logout-item" href="#"><i class="ri-logout-box-r-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Mobile Overlay -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main class="dashboard-content" id="mainContent">
+            
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="text-3xl font-weight-bold text-dark mb-1">Form Elements</h1>
+                    <p class="text-muted">Examples of form elements and controls using our custom CSS system</p>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Form Elements</li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <!-- Alert System Example -->
+            <div class="alert alert-info d-flex align-items-center mb-4">
+                <i class="ri-information-line me-3 icon-fixed-size"></i>
+                <div>
+                    <strong>Form System:</strong> All form elements use our custom CSS classes for consistent styling.
+                </div>
+            </div>
+            
+            <!-- Form Examples Grid -->
+            <div class="row">
+                <!-- Basic Form Example -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0"><i class="ri-user-line me-2"></i> Basic Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <!-- Text Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="fullName">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+                                    <small class="text-muted">Enter your complete name as per ID card</small>
+                                </div>
+                                
+                                <!-- Email Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="email">Email Address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                                    <div class="form-text">We'll never share your email with anyone else.</div>
+                                </div>
+                                
+                                <!-- Password Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                                    <div class="d-flex justify-content-between align-items-center mt-1">
+                                        <small class="text-muted">Minimum 8 characters</small>
+                                        <button type="button" class="btn btn-sm btn-link p-0" id="togglePassword">
+                                            <i class="ri-eye-line icon-fixed-size-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Textarea -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="bio">Bio</label>
+                                    <textarea class="form-control" id="bio" rows="3" placeholder="Tell us about yourself"></textarea>
+                                </div>
+                                
+                                <!-- Select Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="country">Country</label>
+                                    <select class="form-control" id="country">
+                                        <option selected disabled>Select a country</option>
+                                        <option value="US">United States</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="ID">Indonesia</option>
+                                        <option value="JP">Japan</option>
+                                        <option value="SG">Singapore</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- File Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="profilePicture">Profile Picture</label>
+                                    <input type="file" class="form-control" id="profilePicture">
+                                    <div class="form-text">Max file size: 5MB. Accepted formats: JPG, PNG, GIF</div>
+                                </div>
+                                
+                                <!-- Submit Button -->
+                                <div class="d-flex gap-2 mt-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ri-save-line"></i> Save Changes
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-primary">
+                                        <i class="ri-refresh-line"></i> Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Advanced Form Elements -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0"><i class="ri-settings-3-line me-2"></i> Additional Controls</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <!-- Radio Buttons -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label d-block">Account Type</label>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="accountType" id="personal" checked>
+                                            <label class="form-check-label" for="personal">
+                                                <i class="ri-user-line me-1"></i> Personal
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="accountType" id="business">
+                                            <label class="form-check-label" for="business">
+                                                <i class="ri-briefcase-line me-1"></i> Business
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="accountType" id="enterprise">
+                                            <label class="form-check-label" for="enterprise">
+                                                <i class="ri-building-line me-1"></i> Enterprise
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Checkboxes -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label d-block mb-2">Interests</label>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="webDev" checked>
+                                            <label class="form-check-label" for="webDev">
+                                                Web Development
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="mobileDev">
+                                            <label class="form-check-label" for="mobileDev">
+                                                Mobile Development
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="uiux">
+                                            <label class="form-check-label" for="uiux">
+                                                UI/UX Design
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="dataScience">
+                                            <label class="form-check-label" for="dataScience">
+                                                Data Science
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Range Slider -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="satisfaction">Satisfaction Level</label>
+                                    <input type="range" class="form-range" id="satisfaction" min="0" max="10" value="7">
+                                    <div class="d-flex justify-content-between">
+                                        <small class="text-muted">Not satisfied</small>
+                                        <small class="text-muted">Very satisfied</small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Date Picker -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="birthDate">Date of Birth</label>
+                                    <input type="date" class="form-control" id="birthDate">
+                                </div>
+                                
+                                <!-- Time Picker -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="appointmentTime">Appointment Time</label>
+                                    <input type="time" class="form-control" id="appointmentTime">
+                                </div>
+                                
+                                <!-- Color Picker -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="themeColor">Theme Color</label>
+                                    <input type="color" class="form-control form-control-color" id="themeColor" value="#4361ee" title="Choose your color">
+                                </div>
+                                
+                                <!-- Input with Icon -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="search">Search</label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control ps-4" id="search" placeholder="Search...">
+                                        <i class="ri-search-line position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Input Group -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="website">Website URL</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">https://</span>
+                                        <input type="text" class="form-control" id="website" placeholder="example.com">
+                                        <span class="input-group-text">.com</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Disabled Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="disabledInput">Disabled Field</label>
+                                    <input type="text" class="form-control" id="disabledInput" placeholder="This field is disabled" disabled>
+                                </div>
+                                
+                                <!-- Readonly Input -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="readonlyInput">Readonly Field</label>
+                                    <input type="text" class="form-control" id="readonlyInput" value="This value cannot be changed" readonly>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Validation Example -->
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0"><i class="ri-checkbox-circle-line me-2"></i> Form Validation</h5>
+                        </div>
+                        <div class="card-body">
+                            <form class="needs-validation" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationFirstName">First name</label>
+                                        <input type="text" class="form-control" id="validationFirstName" placeholder="First name" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid first name.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationLastName">Last name</label>
+                                        <input type="text" class="form-control" id="validationLastName" placeholder="Last name" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid last name.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationUsername">Username</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">@</span>
+                                            <input type="text" class="form-control" id="validationUsername" placeholder="Username" required>
+                                            <div class="invalid-feedback">
+                                                Please choose a username.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationEmail">Email</label>
+                                        <input type="email" class="form-control" id="validationEmail" placeholder="Email" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid email.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationCity">City</label>
+                                        <input type="text" class="form-control" id="validationCity" placeholder="City" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid city.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationState">State</label>
+                                        <select class="form-control" id="validationState" required>
+                                            <option selected disabled value="">Choose...</option>
+                                            <option>California</option>
+                                            <option>Florida</option>
+                                            <option>Texas</option>
+                                            <option>New York</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a valid state.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationZip">Zip</label>
+                                        <input type="text" class="form-control" id="validationZip" placeholder="Zip" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid zip.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                                        <label class="form-check-label" for="invalidCheck">
+                                            Agree to terms and conditions
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            You must agree before submitting.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary" type="submit">Submit Form</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Input Sizes Example -->
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0"><i class="ri-aspect-ratio-line me-2"></i> Input Sizes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="inputSmall">Small Input</label>
+                                    <input type="text" class="form-control form-control-sm" id="inputSmall" placeholder="Small input">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="inputDefault">Default Input</label>
+                                    <input type="text" class="form-control" id="inputDefault" placeholder="Default input">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="inputLarge">Large Input</label>
+                                    <input type="text" class="form-control form-control-lg" id="inputLarge" placeholder="Large input">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="selectSmall">Small Select</label>
+                                    <select class="form-control form-control-sm" id="selectSmall">
+                                        <option>Small select</option>
+                                        <option>Option 1</option>
+                                        <option>Option 2</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="selectDefault">Default Select</label>
+                                    <select class="form-control" id="selectDefault">
+                                        <option>Default select</option>
+                                        <option>Option 1</option>
+                                        <option>Option 2</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="selectLarge">Large Select</label>
+                                    <select class="form-control form-control-lg" id="selectLarge">
+                                        <option>Large select</option>
+                                        <option>Option 1</option>
+                                        <option>Option 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Form-specific JavaScript -->
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Toggle password visibility
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? 
+                        '<i class="ri-eye-line icon-fixed-size-sm"></i>' : 
+                        '<i class="ri-eye-off-line icon-fixed-size-sm"></i>';
+                });
+            }
+            
+            // Initialize sidebar active state
+            Dashboard.init();
+        });
+    </script>
+</body>
+</html>

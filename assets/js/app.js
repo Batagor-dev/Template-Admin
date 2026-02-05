@@ -108,25 +108,27 @@ const Dashboard = (function () {
 
   // Handle regular menu item click
   function handleMenuItemClick(e) {
-    e.preventDefault();
+  const href = this.getAttribute("href");
 
-    // Remove all active class
-    removeAllActiveClasses();
-
-    // Close all dropdowns
-    closeAllDropdowns();
-
-    // Add active class to clicked item
-    this.classList.add("active");
-
-    // Close sidebar on mobile after selection
-    if (window.innerWidth < 992) {
-      closeSidebar();
-    }
-
-    // Update page content based on selected menu
-    updatePageContent(this.getAttribute("data-menu"));
+  // ✅ Kalau ada href asli, BIARIN browser pindah halaman
+  if (href && href !== "#") {
+    return;
   }
+
+  // ❌ Cegah default HANYA untuk menu non-link
+  e.preventDefault();
+
+  removeAllActiveClasses();
+  closeAllDropdowns();
+  this.classList.add("active");
+
+  if (window.innerWidth < 992) {
+    closeSidebar();
+  }
+
+  updatePageContent(this.getAttribute("data-menu"));
+}
+
 
   // Handle dropdown menu click
   function handleDropdownClick(e) {
@@ -147,6 +149,10 @@ const Dashboard = (function () {
 
   // Handle submenu item click
   function handleSubmenuItemClick(e) {
+     const href = this.getAttribute("href");
+     if (href && href !== "#") {
+       return; // biarin browser pindah halaman
+     }
     e.preventDefault();
 
     const submenu = this.closest(".submenu");
@@ -228,12 +234,37 @@ const Dashboard = (function () {
   }
 
   // ==================== INITIAL SETUP ====================
-  function setActiveMenuItem() {
-    // Set first regular menu item as active by default
-    if (menuItems.length > 0 && !document.querySelector(".menu-item.active")) {
-      menuItems[0].classList.add("active");
+  function setActiveMenuByURL() {
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // Reset semua active
+  removeAllActiveClasses();
+  closeAllDropdowns();
+
+  // Loop submenu
+  document.querySelectorAll(".submenu-item").forEach((item) => {
+    const href = item.getAttribute("href");
+
+    if (href === currentPage) {
+      item.classList.add("active");
+
+      const submenu = item.closest(".submenu");
+      const menuName = submenu.id.replace("submenu-", "");
+      const parentMenu = document.querySelector(
+        `.menu-item[data-menu="${menuName}"]`
+      );
+
+      if (submenu && parentMenu) {
+        submenu.classList.add("open");
+        parentMenu.classList.add("active");
+
+        const arrow = parentMenu.querySelector(".menu-arrow");
+        if (arrow) arrow.classList.add("rotated");
+      }
     }
-  }
+  });
+}
+
 
   // ==================== WINDOW RESIZE HANDLER ====================
   function handleResize() {

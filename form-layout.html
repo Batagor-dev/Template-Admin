@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Layouts - TechArea Production Dashboard</title>
+
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 (Hanya untuk grid system dan utilities) -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css">
+
+    <!-- Remix Icon -->
+    <link rel="stylesheet" href="assets/libs/remixicon/remixicon.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/core.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        
+        <!-- ==================== SIDEBAR ==================== -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/img/logo/logo-techarea.png" alt="Techarea Production">
+                <span>Techarea Production</span>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-title">Main Navigation</div>
+                <a href="index.html" class="menu-item" data-menu="dashboard">
+                    <i class="ri-dashboard-line icon-fixed-size"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                
+                <!-- Forms Dropdown Menu -->
+                <div class="menu-item has-dropdown active" data-menu="forms">
+                    <i class="ri-file-text-line icon-fixed-size"></i>
+                    <span class="menu-text">Forms</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu open" id="submenu-forms">
+                    <a href="form-element.html" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Form Elements</span>
+                    </a>
+                    <a href="form-layout.html" class="submenu-item active">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Form Layouts</span>
+                    </a>
+                </div>
+                
+                <a href="datatables.html" class="menu-item" data-menu="analytics">
+                    <i class="ri-table-line icon-fixed-size"></i>
+                    <span class="menu-text">Datatables</span>
+                </a>
+
+                <a href="select2.html" class="menu-item" data-menu="analytics">
+                    <i class="ri-arrow-down-s-line icon-fixed-size"></i>
+                    <span class="menu-text">Select2</span>
+                </a>
+                
+                <!-- Users Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="users">
+                    <i class="ri-group-line icon-fixed-size"></i>
+                    <span class="menu-text">Users</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-users">
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">All Users</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Add New</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">User Roles</span>
+                    </a> 
+                </div>
+                
+                <div class="menu-title mt-4">Settings</div>
+                
+                <a href="#" class="menu-item" data-menu="settings">
+                    <i class="ri-settings-3-line icon-fixed-size"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+                
+                <!-- Appearance Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="appearance">
+                    <i class="ri-palette-line icon-fixed-size"></i>
+                    <span class="menu-text">Appearance</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-appearance">
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Themes</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Custom CSS</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Widgets</span>
+                    </a>
+                </div>
+                
+                <div class="menu-title mt-4">Support</div>
+                
+                <a href="#" class="menu-item" data-menu="help">
+                    <i class="ri-question-line icon-fixed-size"></i>
+                    <span class="menu-text">Help Center</span>
+                </a>
+                
+                <div class="mt-auto p-4 text-center">
+                    <small class="text-muted">v2.1.0</small>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- ==================== HEADER ==================== -->
+        <header class="dashboard-header" id="header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="ri-menu-2-line icon-fixed-size"></i>
+            </button>
+            
+            <div class="header-controls">
+                <!-- Notification Dropdown -->
+                <div class="position-relative">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-notification-3-line icon-fixed-size"></i>
+                    </button>
+                    <span class="notification-badge">3</span>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text fw-bold">New notifications</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-add-line icon-fixed-size icon-fixed-size-sm me-2"></i> New user registered</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-download-line icon-fixed-size icon-fixed-size-sm me-2"></i> Report generated</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-alert-line icon-fixed-size icon-fixed-size-sm me-2"></i> System update</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Settings Dropdown -->
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-settings-4-line icon-fixed-size"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-lock-line icon-fixed-size icon-fixed-size-sm me-2"></i> Security</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+                
+                <!-- User Avatar Dropdown -->
+                <div class="dropdown">
+                    <div class="user-avatar cursor-pointer" data-bs-toggle="dropdown">
+                        <img src="assets/img/avatar/no-img.jpeg" alt="User Avatar">
+                    </div>
+                    <div class="avatar-status"></div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <div class="dropdown-user-header">
+                                <div class="dropdown-user-avatar">
+                                    <img src="assets/img/avatar/no-img.jpeg" alt="Ahmad Rizki">
+                                </div>
+                                <div class="dropdown-user-info">
+                                    <span class="user-name">Ahmad Rizki</span>
+                                    <span class="user-role">Administrator</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-settings-3-line icon-fixed-size icon-fixed-size-sm me-2"></i> Account Settings</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-shield-keyhole-line icon-fixed-size icon-fixed-size-sm me-2"></i> Privacy</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item logout-item" href="#"><i class="ri-logout-box-r-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Mobile Overlay -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main class="dashboard-content" id="mainContent">
+            
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="text-3xl font-weight-bold text-dark mb-1">Form Layouts</h1>
+                    <p class="text-muted">Different form layout examples for contact and registration forms</p>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Form Layouts</li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <!-- Alert System Example -->
+            <div class="alert alert-info d-flex align-items-center mb-4">
+                <i class="ri-information-line me-3 icon-fixed-size"></i>
+                <div>
+                    <strong>Layout Examples:</strong> This page shows different form layouts for various use cases.
+                </div>
+            </div>
+            
+            <!-- Form Layouts Grid -->
+            <div class="row">
+                <!-- Vertical Form with Icons -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-layout-column-line me-2"></i> Vertical Form with Icons
+                            </h5>
+                            <p class="text-muted mb-0 mt-1">Basic contact form with icons for each input field</p>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <!-- Full Name with Icon -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="verticalFullName">
+                                        <i class="ri-user-line me-2"></i> Full Name
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control ps-5" id="verticalFullName" placeholder="Enter your full name" required>
+                                        <i class="ri-user-line position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                    </div>
+                                    <small class="text-muted">Enter your complete name</small>
+                                </div>
+                                
+                                <!-- Company with Icon -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="verticalCompany">
+                                        <i class="ri-building-line me-2"></i> Company
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control ps-5" id="verticalCompany" placeholder="Enter company name">
+                                        <i class="ri-building-line position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Email with Icon -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="verticalEmail">
+                                        <i class="ri-mail-line me-2"></i> Email Address
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="email" class="form-control ps-5" id="verticalEmail" placeholder="name@example.com" required>
+                                        <i class="ri-mail-line position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Phone with Icon -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="verticalPhone">
+                                        <i class="ri-phone-line me-2"></i> Phone Number
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="tel" class="form-control ps-5" id="verticalPhone" placeholder="Enter phone number">
+                                        <i class="ri-phone-line position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Message with Icon -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="verticalMessage">
+                                        <i class="ri-message-line me-2"></i> Message
+                                    </label>
+                                    <div class="position-relative">
+                                        <textarea class="form-control ps-5" id="verticalMessage" rows="4" placeholder="Enter your message"></textarea>
+                                        <i class="ri-message-line position-absolute top-0 start-0 mt-3 ms-3 text-muted"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Form Actions -->
+                                <div class="d-flex gap-2 mt-4">
+                                    <button type="submit" class="btn btn-primary flex-fill">
+                                        <i class="ri-send-plane-line"></i> Send Message
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-primary flex-fill">
+                                        <i class="ri-close-line"></i> Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">
+                                <i class="ri-information-line me-1"></i> 
+                                Vertical layout is ideal for contact forms and registration pages
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Horizontal Form without Icons -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-layout-row-line me-2"></i> Horizontal Form without Icons
+                            </h5>
+                            <p class="text-muted mb-0 mt-1">Clean horizontal layout with labels aligned to the left</p>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <!-- Full Name Row -->
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <label for="horizontalFullName" class="form-label fw-medium">Full Name</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="horizontalFullName" placeholder="Enter your full name" required>
+                                        <div class="form-text">Enter your complete name</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Company Row -->
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <label for="horizontalCompany" class="form-label fw-medium">Company</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="horizontalCompany" placeholder="Enter company name">
+                                    </div>
+                                </div>
+                                
+                                <!-- Email Row -->
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <label for="horizontalEmail" class="form-label fw-medium">Email</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="email" class="form-control" id="horizontalEmail" placeholder="name@example.com" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Phone Row -->
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <label for="horizontalPhone" class="form-label fw-medium">Phone</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="tel" class="form-control" id="horizontalPhone" placeholder="Enter phone number">
+                                    </div>
+                                </div>
+                                
+                                <!-- Message Row -->
+                                <div class="row mb-3 align-items-start">
+                                    <div class="col-md-3">
+                                        <label for="horizontalMessage" class="form-label fw-medium">Message</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" id="horizontalMessage" rows="4" placeholder="Enter your message"></textarea>
+                                        <div class="form-text">Maximum 500 characters</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Row -->
+                                <div class="row mt-4">
+                                    <div class="col-md-9 offset-md-3">
+                                        <div class="d-flex gap-2">
+                                            <button type="submit" class="btn btn-primary flex-fill">
+                                                Send Message
+                                            </button>
+                                            <button type="reset" class="btn btn-outline-primary flex-fill">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">
+                                <i class="ri-information-line me-1"></i> 
+                                Horizontal layout saves vertical space and works well for data entry forms
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Form Layout Examples -->
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-layout-masonry-line me-2"></i> Additional Layout Examples
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Two Column Form -->
+                                <div class="col-lg-6">
+                                    <h6 class="mb-3">Two Column Form Layout</h6>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="twoColFirstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="twoColFirstName" placeholder="First name" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="twoColLastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="twoColLastName" placeholder="Last name" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="twoColEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="twoColEmail" placeholder="Email" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="twoColPhone" class="form-label">Phone</label>
+                                                <input type="tel" class="form-control" id="twoColPhone" placeholder="Phone">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="twoColAddress" class="form-label">Address</label>
+                                            <textarea class="form-control" id="twoColAddress" rows="2" placeholder="Enter address"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Inline Form -->
+                                <div class="col-lg-6">
+                                    <h6 class="mb-3">Inline Form Layout</h6>
+                                    <form class="row g-3 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="inlineEmail" class="visually-hidden">Email</label>
+                                            <input type="email" class="form-control" id="inlineEmail" placeholder="Email">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="inlinePassword" class="visually-hidden">Password</label>
+                                            <input type="password" class="form-control" id="inlinePassword" placeholder="Password">
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="inlineRemember">
+                                                <label class="form-check-label" for="inlineRemember">
+                                                    Remember me
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary">Sign in</button>
+                                        </div>
+                                    </form>
+                                    
+                                    <hr class="my-4">
+                                    
+                                    <!-- Floating Labels Form -->
+                                    <h6 class="mb-3">Floating Labels Form</h6>
+                                    <form>
+                                        <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+                                            <label for="floatingEmail">Email address</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                            <label for="floatingPassword">Password</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px"></textarea>
+                                            <label for="floatingTextarea">Comments</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Form-specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dashboard
+            Dashboard.init();
+            
+            // Set active menu based on current page
+            setActiveMenuByURL();
+            
+            // Form validation for horizontal form
+            const horizontalForm = document.querySelector('.card:nth-child(2) form');
+            if (horizontalForm) {
+                horizontalForm.addEventListener('submit', function(e) {
+                    const emailInput = document.getElementById('horizontalEmail');
+                    const nameInput = document.getElementById('horizontalFullName');
+                    
+                    let isValid = true;
+                    
+                    // Email validation
+                    if (!emailInput.value || !isValidEmail(emailInput.value)) {
+                        emailInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        emailInput.classList.remove('is-invalid');
+                    }
+                    
+                    // Name validation
+                    if (!nameInput.value.trim()) {
+                        nameInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        nameInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        e.preventDefault();
+                        showNotification('Please fill all required fields correctly.', 'warning');
+                    } else {
+                        showNotification('Form submitted successfully!', 'success');
+                    }
+                });
+            }
+            
+            // Form validation for vertical form
+            const verticalForm = document.querySelector('.card:nth-child(1) form');
+            if (verticalForm) {
+                verticalForm.addEventListener('submit', function(e) {
+                    const emailInput = document.getElementById('verticalEmail');
+                    const nameInput = document.getElementById('verticalFullName');
+                    
+                    let isValid = true;
+                    
+                    // Email validation
+                    if (!emailInput.value || !isValidEmail(emailInput.value)) {
+                        emailInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        emailInput.classList.remove('is-invalid');
+                    }
+                    
+                    // Name validation
+                    if (!nameInput.value.trim()) {
+                        nameInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        nameInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        e.preventDefault();
+                        showNotification('Please fill all required fields correctly.', 'warning');
+                    } else {
+                        showNotification('Form submitted successfully!', 'success');
+                    }
+                });
+            }
+            
+            // Helper function to validate email
+            function isValidEmail(email) {
+                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+            
+            // Show notification function
+            function showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+                notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+                notification.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                // Add to body
+                document.body.appendChild(notification);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 5000);
+            }
+            
+            // Set active menu by URL
+            function setActiveMenuByURL() {
+                const currentPage = window.location.pathname.split('/').pop();
+                
+                // Reset all active
+                document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Close all dropdowns
+                document.querySelectorAll('.submenu').forEach(submenu => {
+                    submenu.classList.remove('open');
+                });
+                
+                document.querySelectorAll('.menu-arrow').forEach(arrow => {
+                    arrow.classList.remove('rotated');
+                });
+                
+                // Find and activate current page
+                document.querySelectorAll('.submenu-item').forEach(item => {
+                    const href = item.getAttribute('href');
+                    
+                    if (href === currentPage) {
+                        item.classList.add('active');
+                        
+                        const submenu = item.closest('.submenu');
+                        const menuName = submenu.id.replace('submenu-', '');
+                        const parentMenu = document.querySelector(`.menu-item[data-menu="${menuName}"]`);
+                        
+                        if (submenu && parentMenu) {
+                            submenu.classList.add('open');
+                            parentMenu.classList.add('active');
+                            
+                            const arrow = parentMenu.querySelector('.menu-arrow');
+                            if (arrow) arrow.classList.add('rotated');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
