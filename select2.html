@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select2 - TechArea Production Dashboard</title>
+
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css">
+
+    <!-- Remix Icon -->
+    <link rel="stylesheet" href="assets/libs/remixicon/remixicon.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/core.css">
+    
+    <!-- Select2 Custom CSS -->
+    <link rel="stylesheet" href="assets/libs/select2/css/select2.css">
+</head>
+<body>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        
+        <!-- ==================== SIDEBAR ==================== -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/img/logo/logo-techarea.png" alt="Techarea Production">
+                <span>Techarea Production</span>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-title">Main Navigation</div>
+                <a href="index.html" class="menu-item" data-menu="dashboard">
+                    <i class="ri-dashboard-line icon-fixed-size"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                
+                <!-- Forms Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="forms">
+                    <i class="ri-file-text-line icon-fixed-size"></i>
+                    <span class="menu-text">Forms</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-forms">
+                    <a href="form-element.html" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Form Elements</span>
+                    </a>
+                    <a href="form-layout.html" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Form Layouts</span>
+                    </a>
+                </div>
+                
+                <a href="datatables.html" class="menu-item" data-menu="analytics">
+                    <i class="ri-table-line icon-fixed-size"></i>
+                    <span class="menu-text">Datatables</span>
+                </a>
+
+                <a href="select2.html" class="menu-item active" data-menu="analytics">
+                    <i class="ri-list-unordered icon-fixed-size"></i>
+                    <span class="menu-text">Select2</span>
+                </a>
+                
+                <!-- Users Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="users">
+                    <i class="ri-group-line icon-fixed-size"></i>
+                    <span class="menu-text">Users</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-users">
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">All Users</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Add New</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">User Roles</span>
+                    </a> 
+                </div>
+                
+                <div class="menu-title mt-4">Settings</div>
+                
+                <a href="#" class="menu-item" data-menu="settings">
+                    <i class="ri-settings-3-line icon-fixed-size"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+                
+                <!-- Appearance Dropdown Menu -->
+                <div class="menu-item has-dropdown" data-menu="appearance">
+                    <i class="ri-palette-line icon-fixed-size"></i>
+                    <span class="menu-text">Appearance</span>
+                    <i class="ri-arrow-right-s-line menu-arrow icon-fixed-size"></i>
+                </div>
+                <div class="submenu" id="submenu-appearance">
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Themes</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Custom CSS</span>
+                    </a>
+                    <a href="#" class="submenu-item">
+                        <i class="ri-circle-fill icon-fixed-size icon-fixed-size-sm"></i>
+                        <span class="menu-text">Widgets</span>
+                    </a>
+                </div>
+                
+                <div class="menu-title mt-4">Support</div>
+                
+                <a href="#" class="menu-item" data-menu="help">
+                    <i class="ri-question-line icon-fixed-size"></i>
+                    <span class="menu-text">Help Center</span>
+                </a>
+                
+                <div class="mt-auto p-4 text-center">
+                    <small class="text-muted">v2.1.0</small>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- ==================== HEADER ==================== -->
+        <header class="dashboard-header" id="header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="ri-menu-2-line icon-fixed-size"></i>
+            </button>
+            
+            <div class="header-controls">
+                <!-- Notification Dropdown -->
+                <div class="position-relative">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-notification-3-line icon-fixed-size"></i>
+                    </button>
+                    <span class="notification-badge">3</span>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text fw-bold">New notifications</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-add-line icon-fixed-size icon-fixed-size-sm me-2"></i> New user registered</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-download-line icon-fixed-size icon-fixed-size-sm me-2"></i> Report generated</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-alert-line icon-fixed-size icon-fixed-size-sm me-2"></i> System update</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Settings Dropdown -->
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-settings-4-line icon-fixed-size"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-lock-line icon-fixed-size icon-fixed-size-sm me-2"></i> Security</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+                
+                <!-- User Avatar Dropdown -->
+                <div class="dropdown">
+                    <div class="user-avatar cursor-pointer" data-bs-toggle="dropdown">
+                        <img src="assets/img/avatar/no-img.jpeg" alt="User Avatar">
+                    </div>
+                    <div class="avatar-status"></div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <div class="dropdown-user-header">
+                                <div class="dropdown-user-avatar">
+                                    <img src="assets/img/avatar/no-img.jpeg" alt="Ahmad Rizki">
+                                </div>
+                                <div class="dropdown-user-info">
+                                    <span class="user-name">Ahmad Rizki</span>
+                                    <span class="user-role">Administrator</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-settings-3-line icon-fixed-size icon-fixed-size-sm me-2"></i> Account Settings</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-shield-keyhole-line icon-fixed-size icon-fixed-size-sm me-2"></i> Privacy</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item logout-item" href="#"><i class="ri-logout-box-r-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Mobile Overlay -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main class="dashboard-content" id="mainContent">
+            
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="text-3xl font-weight-bold text-dark mb-1">Select2</h1>
+                    <p class="text-muted">Advanced select boxes with searching, tagging, and remote data support</p>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Select2</li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <!-- Alert System Example -->
+            <div class="alert alert-info d-flex align-items-center mb-4">
+                <i class="ri-information-line me-3 icon-fixed-size"></i>
+                <div>
+                    <strong>Select2 System:</strong> Enhanced select boxes with search, multi-select, tagging, and AJAX support.
+                </div>
+            </div>
+            
+            <!-- Select2 Examples Grid -->
+            <div class="row">
+                <!-- Basic Select2 Example -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-arrow-down-circle-line me-2"></i> Basic Select2
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Single Selection</label>
+                                <div class="basic-select" data-options="Indonesia,Malaysia,Singapore,Thailand,Vietnam,Philippines,United States,United Kingdom,Japan,South Korea">
+                                    <div class="basic-control">
+                                        <input type="text" placeholder="Select a country" readonly>
+                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">With Placeholder</label>
+                                <div class="basic-select" data-options="Option 1,Option 2,Option 3,Option 4,Option 5">
+                                    <div class="basic-control">
+                                        <input type="text" placeholder="Select an option" readonly>
+                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Disabled Select2</label>
+                                <div class="basic-select" data-options="Disabled Option 1,Disabled Option 2,Disabled Option 3">
+                                    <div class="basic-control" style="opacity: 0.6; cursor: not-allowed;">
+                                        <input type="text" placeholder="Disabled select" readonly disabled>
+                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Multiple Select Example -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-checkbox-multiple-line me-2"></i> Multiple Selection
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Multiple Selection (Standard)</label>
+                                <div class="tag-select primary" data-options="Indonesia,Malaysia,Singapore,Thailand,Vietnam,Philippines,United States,United Kingdom,Japan,South Korea">
+                                    <input type="text" placeholder="Select multiple countries">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Multiple with Maximum Selection</label>
+                                <div class="tag-select success" data-options="React,Vue.js,Angular,Svelte,Next.js,Nuxt.js,Laravel,Django,Spring Boot,Express.js" data-max="3">
+                                    <input type="text" placeholder="Select up to 3 frameworks">
+                                </div>
+                                <small class="text-muted">Maximum 3 selections allowed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tags Input Example -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-price-tag-3-line me-2"></i> Tags Input
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Basic Tags</label>
+                                <div class="tag-select gray" data-options="Red,Blue,Green,Yellow,Purple,Orange">
+                                    <input type="text" placeholder="Type and press enter to add tags">
+                                </div>
+                                <small class="text-muted">Type and press enter to add new tags</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Tags with Preset Values</label>
+                                <div class="tag-select info" data-options="JavaScript,Python,Java,PHP,Ruby,Go,Rust,Swift">
+                                    <input type="text" placeholder="Add programming languages">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Tags with Maximum Items</label>
+                                <div class="tag-select danger" data-options="Frontend,Backend,DevOps,Mobile,Database,Cloud,AI/ML" data-max="5">
+                                    <input type="text" placeholder="Select up to 5 skills">
+                                </div>
+                                <small class="text-muted">Maximum 5 tags allowed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Advanced Features -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-settings-3-line me-2"></i> Advanced Features
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">With Clear Button</label>
+                                <div class="basic-select" data-options="Jakarta,Bandung,Surabaya,Yogyakarta,Bali,Medan">
+                                    <div class="basic-control">
+                                        <input type="text" placeholder="Select a city" readonly>
+                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Grouped Options</label>
+                                <div class="basic-select" data-options="React,Vue.js,Angular,Svelte,Node.js,Laravel,Django,Spring Boot,React Native,Flutter,Kotlin,Swift">
+                                    <div class="basic-control">
+                                        <input type="text" placeholder="Select a framework" readonly>
+                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">With Icons</label>
+                                <div class="basic-select" data-options="Dashboard,Users,Settings,Analytics,Reports,Calendar">
+                                    <div class="basic-control">
+                                        <input type="text" placeholder="Select an icon" readonly>
+                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Integration -->
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ri-layout-line me-2"></i> Form Integration Example
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="select2Form">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Country</label>
+                                        <div class="basic-select" data-options="Indonesia,Malaysia,Singapore,Thailand">
+                                            <div class="basic-control">
+                                                <input type="text" name="country" placeholder="Select your country" readonly required>
+                                                <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Skills</label>
+                                        <div class="tag-select primary" data-options="HTML,CSS,JavaScript,React,Vue.js,Node.js,Python,PHP">
+                                            <input type="text" name="skills" placeholder="Add your skills" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Tags</label>
+                                        <div class="tag-select info" data-options="Web Development,Mobile Development,DevOps,UI/UX Design,Database Management">
+                                            <input type="text" name="tags" placeholder="Add tags">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Framework</label>
+                                        <div class="basic-select" data-options="React,Vue.js,Angular,Laravel,Django">
+                                            <div class="basic-control">
+                                                <input type="text" name="framework" placeholder="Select a framework" readonly>
+                                                <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="ri-save-line me-2"></i> Submit Form
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" id="resetForm">
+                                            <i class="ri-refresh-line me-2"></i> Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Select2 Custom JavaScript -->
+    <script src="assets/libs/select2/js/select2.js"></script>
+</body>
+</html>
