@@ -3,7 +3,7 @@
 DATATABLES CUSTOM JAVASCRIPT
 ===========================================
 Author: TechArea Production
-Description: Custom JavaScript for DataTables functionality
+Description: Custom JavaScript for DataTables functionality with Custom Pagination
 */
 
 // DataTables Module
@@ -19,11 +19,201 @@ const DataTablesApp = (function () {
         { id: 7, name: "Herrod Chandler", position: "Sales Assistant", office: "San Francisco", age: 59, startDate: "2012-08-06", salary: 137500, status: "Active" },
         { id: 8, name: "Rhona Davidson", position: "Integration Specialist", office: "Tokyo", age: 55, startDate: "2010-10-14", salary: 327900, status: "Inactive" },
         { id: 9, name: "Colleen Hurst", position: "Javascript Developer", office: "San Francisco", age: 39, startDate: "2009-09-15", salary: 205500, status: "Active" },
-        { id: 10, name: "Sonya Frost", position: "Software Engineer", office: "Edinburgh", age: 23, startDate: "2008-12-13", salary: 103600, status: "Active" }
+        { id: 10, name: "Sonya Frost", position: "Software Engineer", office: "Edinburgh", age: 23, startDate: "2008-12-13", salary: 103600, status: "Active" },
+        { id: 11, name: "Jena Gaines", position: "Office Manager", office: "London", age: 30, startDate: "2008-12-19", salary: 90560, status: "Active" },
+        { id: 12, name: "Quinn Flynn", position: "Support Lead", office: "Edinburgh", age: 22, startDate: "2013-03-03", salary: 342000, status: "Active" },
+        { id: 13, name: "Charde Marshall", position: "Regional Director", office: "San Francisco", age: 36, startDate: "2008-10-16", salary: 470600, status: "Inactive" },
+        { id: 14, name: "Haley Kennedy", position: "Senior Marketing Designer", office: "London", age: 43, startDate: "2012-12-18", salary: 313500, status: "Active" },
+        { id: 15, name: "Tatyana Fitzpatrick", position: "Regional Director", office: "London", age: 19, startDate: "2010-03-17", salary: 385750, status: "Active" },
+        { id: 16, name: "Michael Silva", position: "Marketing Designer", office: "London", age: 66, startDate: "2012-11-27", salary: 198500, status: "Active" },
+        { id: 17, name: "Paul Byrd", position: "Chief Financial Officer", office: "New York", age: 64, startDate: "2010-06-09", salary: 725000, status: "Active" },
+        { id: 18, name: "Gloria Little", position: "Systems Administrator", office: "New York", age: 59, startDate: "2009-04-10", salary: 237500, status: "Active" },
+        { id: 19, name: "Bradley Greer", position: "Software Engineer", office: "London", age: 41, startDate: "2012-10-13", salary: 132000, status: "On Leave" },
+        { id: 20, name: "Dai Rios", position: "Personnel Lead", office: "Edinburgh", age: 35, startDate: "2012-09-26", salary: 217500, status: "Active" }
     ];
 
     let basicTable;
     let isDataTableInitialized = false;
+
+    // ==================== CUSTOM PAGINATION MANAGER ====================
+    const CustomPagination = (function() {
+        let table;
+        let currentPage = 1;
+        let pageSize = 10;
+        let totalPages = 1;
+        
+        function init(dataTable) {
+            table = dataTable;
+            pageSize = table.page.len();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Initial update
+            updatePagination();
+            
+            console.log("Custom Pagination initialized");
+        }
+        
+        function setupEventListeners() {
+            // Previous page
+            $(document).on('click', '#prev-page', function(e) {
+                e.preventDefault();
+                if (!$(this).hasClass('disabled')) {
+                    goToPage(currentPage - 1);
+                }
+            });
+            
+            // Next page
+            $(document).on('click', '#next-page', function(e) {
+                e.preventDefault();
+                if (!$(this).hasClass('disabled')) {
+                    goToPage(currentPage + 1);
+                }
+            });
+            
+            // Page size change
+            $(document).on('change', '#page-size-select', function() {
+                pageSize = parseInt($(this).val());
+                table.page.len(pageSize).draw();
+                updatePagination();
+            });
+            
+            // Page number click (delegated)
+            $(document).on('click', '.page-number', function(e) {
+                e.preventDefault();
+                const pageNum = parseInt($(this).data('page'));
+                if (pageNum !== currentPage) {
+                    goToPage(pageNum);
+                }
+            });
+        }
+        
+        function goToPage(page) {
+            if (page < 1 || page > totalPages) return;
+            
+            currentPage = page;
+            table.page(page - 1).draw(false);
+            updatePagination();
+            
+            // Smooth scroll to table
+            $('html, body').animate({
+                scrollTop: $('#basicDatatable').offset().top - 100
+            }, 300);
+        }
+        
+        function updatePagination() {
+            if (!table) return;
+            
+            const info = table.page.info();
+            currentPage = info.page + 1;
+            totalPages = info.pages;
+            
+            // Update info text
+            $('#pagination-start').text(info.start + 1);
+            $('#pagination-end').text(info.end);
+            $('#pagination-total').text(info.recordsTotal);
+            
+            // Update page size selector
+            $('#page-size-select').val(info.length);
+            
+            // Update pagination buttons
+            updatePageButtons();
+            
+            // Update prev/next button states
+            $('#prev-page').toggleClass('disabled', currentPage === 1);
+            $('#next-page').toggleClass('disabled', currentPage === totalPages);
+        }
+        
+        function updatePageButtons() {
+            const $pagination = $('.pagination-custom');
+            const pageNumbers = generatePageNumbers();
+            
+            // Clear existing page numbers (keep prev/next)
+            $pagination.find('.page-item:not(#prev-page):not(#next-page)').remove();
+            
+            // Add page number buttons
+            pageNumbers.forEach(pageNum => {
+                const isActive = pageNum === currentPage;
+                const isEllipsis = pageNum === '...';
+                
+                const $li = $('<li>', {
+                    class: 'page-item' + 
+                           (isActive ? ' active' : '') + 
+                           (isEllipsis ? ' ellipsis disabled' : ''),
+                    'data-page': isEllipsis ? null : pageNum
+                });
+                
+                const $a = $('<a>', {
+                    class: 'page-link' + (isEllipsis ? '' : ' page-number'),
+                    href: '#',
+                    'data-page': isEllipsis ? null : pageNum
+                }).html(isEllipsis ? '...' : pageNum);
+                
+                $li.append($a);
+                
+                // Insert before next button
+                $('#next-page').before($li);
+            });
+        }
+        
+        function generatePageNumbers() {
+            const pages = [];
+            const maxVisible = 5; // Maximum visible page numbers
+            
+            if (totalPages <= maxVisible) {
+                // Show all pages
+                for (let i = 1; i <= totalPages; i++) {
+                    pages.push(i);
+                }
+            } else {
+                // Always show first page
+                pages.push(1);
+                
+                // Calculate start and end
+                let start = Math.max(2, currentPage - 1);
+                let end = Math.min(totalPages - 1, currentPage + 1);
+                
+                // Adjust if at the beginning
+                if (currentPage <= 3) {
+                    end = 4;
+                }
+                
+                // Adjust if at the end
+                if (currentPage >= totalPages - 2) {
+                    start = totalPages - 3;
+                }
+                
+                // Add ellipsis if needed
+                if (start > 2) {
+                    pages.push('...');
+                }
+                
+                // Add middle pages
+                for (let i = start; i <= end; i++) {
+                    pages.push(i);
+                }
+                
+                // Add ellipsis if needed
+                if (end < totalPages - 1) {
+                    pages.push('...');
+                }
+                
+                // Always show last page
+                if (totalPages > 1) {
+                    pages.push(totalPages);
+                }
+            }
+            
+            return pages;
+        }
+        
+        return {
+            init,
+            updatePagination,
+            goToPage
+        };
+    })();
 
     // Initialize DataTables
     function init() {
@@ -69,7 +259,7 @@ const DataTablesApp = (function () {
             // Hapus data yang ada di tbody untuk menghindari konflik
             $('#basicDatatable tbody').empty();
             
-            // Initialize DataTable dengan opsi yang lebih sederhana
+            // Initialize DataTable
             basicTable = $('#basicDatatable').DataTable({
                 data: sampleData,
                 columns: [
@@ -184,23 +374,23 @@ const DataTablesApp = (function () {
                 language: {
                     lengthMenu: "Show _MENU_ entries",
                     search: "Search:",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "Showing 0 to 0 of 0 entries",
-                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    info: "", // Hide default info
+                    infoEmpty: "",
+                    infoFiltered: "",
                     paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Next",
-                        previous: "Previous"
+                        first: "",
+                        last: "",
+                        next: "",
+                        previous: ""
                     }
                 },
                 order: [[0, 'asc']],
-                initComplete: function() {
-                    console.log("DataTable initialized successfully");
-                    isDataTableInitialized = true;
+                drawCallback: function(settings) {
+                    // Update custom pagination
+                    CustomPagination.updatePagination();
                     
-                    // Tambahkan event listeners untuk action buttons
-                    $('#basicDatatable').on('click', '.action-btn', function() {
+                    // Update action buttons
+                    $('#basicDatatable').off('click', '.action-btn').on('click', '.action-btn', function() {
                         const btn = $(this);
                         const action = btn.hasClass('view') ? 'view' :
                                      btn.hasClass('edit') ? 'edit' :
@@ -212,8 +402,15 @@ const DataTablesApp = (function () {
                         }
                     });
                 },
-                createdRow: function(row, data, dataIndex) {
-                    $(row).addClass('data-row');
+                initComplete: function() {
+                    console.log("DataTable initialized successfully");
+                    isDataTableInitialized = true;
+                    
+                    // Initialize custom pagination
+                    CustomPagination.init(this.api());
+                    
+                    // Update pagination style
+                    updatePaginationStyle();
                 }
             });
             
@@ -509,6 +706,12 @@ const DataTablesApp = (function () {
         setTimeout(() => {
             notification.alert('close');
         }, 5000);
+    }
+
+    function updatePaginationStyle() {
+        setTimeout(function() {
+            console.log("Pagination styling updated");
+        }, 50);
     }
 
     // ==================== PUBLIC API ====================
