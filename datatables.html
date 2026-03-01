@@ -25,6 +25,56 @@
     
     <!-- DataTables Custom CSS -->
     <link rel="stylesheet" href="assets/libs/datatables/css/datatables.css">
+
+    <!-- DataTables Position Fix -->
+<style>
+/* ===========================================
+   FIX DATATABLE SEARCH BOOTSTRAP 5
+   =========================================== */
+
+/* Ubah row atas jadi flex */
+.dataTables_wrapper .row:first-child {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+/* Kolom kiri (show entries) */
+.dataTables_wrapper .row:first-child > div:first-child {
+    width: auto !important;
+}
+
+/* Kolom kanan (search) */
+.dataTables_wrapper .row:first-child > div:last-child {
+    width: auto !important;
+    margin-left: auto !important;
+    text-align: right !important;
+}
+
+/* Rapikan search */
+.dataTables_wrapper .dataTables_filter {
+    text-align: right !important;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 8px;
+}
+
+.dataTables_wrapper {
+    background: transparent !important;
+    padding-bottom: 0 !important;
+}
+
+/* Kalau pakai card */
+.card-body {
+    padding-bottom: 0 !important;
+}
+
+/* Hilangkan ruang kosong bawah table */
+.table-responsive {
+    margin-bottom: 0 !important;
+}
+</style>
+
 </head>
 <body>
     <!-- Dashboard Container -->
