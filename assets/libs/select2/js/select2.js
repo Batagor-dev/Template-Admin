@@ -1,530 +1,623 @@
 /* 
 ===========================================
-SELECT2 MODERN JAVASCRIPT - TECHAREA PRODUCTION
+SELECT2 PROFESSIONAL - TECHAREA PRODUCTION
 ===========================================
 Author: TechArea Production
-Description: Modern Select2 functionality dengan tema TechArea
+Description: Professional Select2 JavaScript - Complete with Dropdown and Form Handling
 */
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("SELECT2.JS: Initializing select components...");
-    
-    // Cegah inisialisasi ganda
-    if (window.select2Initialized) return;
-    window.select2Initialized = true;
-    
-    /* ===============================
-       BASIC SELECT DENGAN SEARCH
-    =============================== */
-    const basicSelects = document.querySelectorAll(".basic-select:not([data-initialized])");
-    
-    basicSelects.forEach((select, index) => {
-        select.setAttribute("data-initialized", "true");
+(function() {
+    'use strict';
+
+    if (window.TechAreaSelect2) return;
+
+    let activeDropdown = null;
+    let activeTrigger = null;
+
+    const positionDropdown = (dropdown, trigger) => {
+        const rect = trigger.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const dropdownHeight = 320;
         
-        const input = select.querySelector("input");
-        const control = select.querySelector(".basic-control");
-        const arrow = select.querySelector(".arrow");
+        let top = rect.bottom;
+        let left = rect.left;
         
-        if (!input || !control) {
-            console.error("Invalid basic-select structure", select);
-            return;
+        // Cek apakah dropdown akan keluar dari viewport bawah
+        if (rect.bottom + dropdownHeight > viewportHeight) {
+            top = rect.top - dropdownHeight - 4;
         }
         
-        // Get options from data attribute
-        const optionsData = select.getAttribute("data-options");
-        if (!optionsData) {
-            console.error("No data-options attribute found");
-            return;
+        // Batasi agar tidak keluar dari viewport kiri/kanan
+        left = Math.max(10, Math.min(left, window.innerWidth - 310));
+        
+        // Set position fixed dengan nilai dalam px
+        dropdown.style.top = top + 'px';
+        dropdown.style.left = left + 'px';
+        dropdown.style.width = Math.max(rect.width, 300) + 'px';
+        
+        // Pastikan z-index tertinggi
+        dropdown.style.zIndex = '999999';
+    };
+
+    const closeAllDropdowns = (except = null) => {
+        document.querySelectorAll('.basic-dropdown.show, .tag-dropdown.show').forEach(dropdown => {
+            if (except !== dropdown) {
+                dropdown.classList.remove('show');
+                const parent = dropdown.closest('.basic-select, .tag-select');
+                if (parent) {
+                    parent.classList.remove('open', 'focused');
+                }
+            }
+        });
+        
+        const overlay = document.querySelector('.select-overlay');
+        if (overlay) {
+            overlay.classList.remove('show');
         }
         
-        const options = optionsData.split(",").map(o => o.trim());
-        let selectedValue = '';
+        activeDropdown = null;
+        activeTrigger = null;
+    };
+
+    class BasicSelect {
+        constructor(element) {
+            this.element = element;
+            this.input = element.querySelector('input');
+            this.control = element.querySelector('.basic-control');
+            this.options = element.dataset.options?.split(',').map(o => o.trim()) || [];
+            this.selectedValue = '';
+            this.dropdown = null;
+            this.init();
+        }
         
-        // Remove old dropdown if exists
-        const oldDropdown = select.querySelector(".basic-dropdown");
-        if (oldDropdown) oldDropdown.remove();
+        init() {
+            const oldDropdown = this.element.querySelector('.basic-dropdown');
+            if (oldDropdown) oldDropdown.remove();
+            this.createDropdown();
+            this.bindEvents();
+        }
         
-        // CREATE DROPDOWN
-        const dropdown = document.createElement("div");
-        dropdown.className = "basic-dropdown";
+        createDropdown() {
+            this.dropdown = document.createElement('div');
+            this.dropdown.className = 'basic-dropdown';
+            this.dropdown.style.zIndex = '999999';
+            
+            const searchDiv = document.createElement('div');
+            searchDiv.className = 'dropdown-search';
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.placeholder = 'Search...';
+            searchDiv.appendChild(searchInput);
+            this.dropdown.appendChild(searchDiv);
+            
+            this.optionsContainer = document.createElement('div');
+            this.optionsContainer.className = 'dropdown-options';
+            this.dropdown.appendChild(this.optionsContainer);
+            
+            document.body.appendChild(this.dropdown);
+            this.renderOptions();
+        }
         
-        // Search input
-        const searchDiv = document.createElement("div");
-        searchDiv.className = "search-input";
-        const searchInput = document.createElement("input");
-        searchInput.type = "text";
-        searchInput.placeholder = "Search...";
-        searchDiv.appendChild(searchInput);
-        dropdown.appendChild(searchDiv);
-        
-        // Options container
-        const optionsContainer = document.createElement("div");
-        optionsContainer.className = "options-container";
-        dropdown.appendChild(optionsContainer);
-        
-        // Function to render options
-        function renderOptions(filter = "") {
-            optionsContainer.innerHTML = "";
-            const filteredOptions = options.filter(opt => 
+        renderOptions(filter = '') {
+            const filtered = this.options.filter(opt => 
                 opt.toLowerCase().includes(filter.toLowerCase())
             );
             
-            if (filteredOptions.length === 0) {
-                const noResults = document.createElement("div");
-                noResults.className = "no-results";
-                noResults.textContent = "No results found";
-                optionsContainer.appendChild(noResults);
+            this.optionsContainer.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'dropdown-empty';
+                empty.textContent = 'No results found';
+                this.optionsContainer.appendChild(empty);
                 return;
             }
             
-            filteredOptions.forEach(opt => {
-                const item = document.createElement("div");
-                item.className = "option";
-                item.textContent = opt;
-                item.dataset.value = opt;
-                
-                // Mark as selected if matches current value
-                if (selectedValue === opt) {
-                    item.classList.add("selected");
+            filtered.forEach(opt => {
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                if (opt === this.selectedValue) {
+                    option.classList.add('selected');
                 }
+                option.textContent = opt;
+                option.dataset.value = opt;
                 
-                item.addEventListener("click", (e) => {
+                option.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    selectedValue = opt;
-                    input.value = opt;
+                    this.selectOption(opt);
                     closeAllDropdowns();
-                    
-                    // Remove selected class from all options
-                    optionsContainer.querySelectorAll(".option").forEach(optEl => {
-                        optEl.classList.remove("selected");
-                    });
-                    
-                    // Add selected class to clicked option
-                    item.classList.add("selected");
-                    
-                    // Trigger change event
-                    const changeEvent = new Event('change', { bubbles: true });
-                    select.dispatchEvent(changeEvent);
                 });
                 
-                optionsContainer.appendChild(item);
+                this.optionsContainer.appendChild(option);
             });
         }
         
-        // Initial render
-        renderOptions();
-        select.appendChild(dropdown);
-        
-        // Toggle dropdown on control click
-        control.addEventListener("click", (e) => {
-            e.stopPropagation();
-            e.preventDefault();
+        selectOption(value) {
+            this.selectedValue = value;
+            this.input.value = value;
             
-            // Close all other dropdowns
-            closeAllDropdowns(select);
-            
-            const isOpen = dropdown.classList.contains("show");
-            
-            if (!isOpen) {
-                dropdown.classList.add("show");
-                select.classList.add("open");
-                setTimeout(() => {
-                    searchInput.focus();
-                    searchInput.value = "";
-                    renderOptions();
-                }, 10);
-            } else {
-                dropdown.classList.remove("show");
-                select.classList.remove("open");
-            }
-        });
-        
-        // Search functionality
-        searchInput.addEventListener("input", (e) => {
-            renderOptions(e.target.value);
-        });
-        
-        // Keyboard navigation
-        searchInput.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                closeAllDropdowns();
-            } else if (e.key === "ArrowDown") {
-                const firstOption = optionsContainer.querySelector(".option");
-                if (firstOption) firstOption.focus();
-            }
-        });
-    });
-    
-    /* ===============================
-       TAG SELECT (MULTIPLE)
-    =============================== */
-    const tagSelects = document.querySelectorAll(".tag-select:not([data-initialized])");
-    
-    tagSelects.forEach((select, index) => {
-        select.setAttribute("data-initialized", "true");
-        
-        const input = select.querySelector("input");
-        
-        if (!input) {
-            console.error("Invalid tag-select structure", select);
-            return;
-        }
-        
-        // Get options from data attribute
-        const optionsData = select.getAttribute("data-options");
-        if (!optionsData) {
-            console.error("No data-options attribute found");
-            return;
-        }
-        
-        const options = optionsData.split(",").map(o => o.trim());
-        let selectedTags = [];
-        const maxTags = parseInt(select.getAttribute("data-max")) || Infinity;
-        
-        // Remove old dropdown if exists
-        const oldDropdown = select.querySelector(".tag-dropdown");
-        if (oldDropdown) oldDropdown.remove();
-        
-        // Clear old tags
-        const oldTags = select.querySelectorAll(".tag:not(:has(input))");
-        oldTags.forEach(tag => tag.remove());
-        
-        // CREATE DROPDOWN
-        const dropdown = document.createElement("div");
-        dropdown.className = "tag-dropdown";
-        
-        // Function to render selected tags
-        function renderTags() {
-            // Remove all existing tags (except input)
-            const existingTags = select.querySelectorAll(".tag:not(:has(input))");
-            existingTags.forEach(tag => tag.remove());
-            
-            // Add selected tags
-            selectedTags.forEach((tag, tagIndex) => {
-                const tagEl = document.createElement("span");
-                tagEl.className = "tag";
-                tagEl.dataset.index = tagIndex;
-                tagEl.innerHTML = `${tag}<span class="remove">&times;</span>`;
-                
-                // Remove tag on click
-                tagEl.querySelector(".remove").addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    selectedTags = selectedTags.filter(t => t !== tag);
-                    renderTags();
-                    renderDropdownOptions();
-                    
-                    // Trigger change event
-                    const changeEvent = new Event('change', { bubbles: true });
-                    select.dispatchEvent(changeEvent);
-                });
-                
-                // Insert tag before input
-                select.insertBefore(tagEl, input);
+            this.optionsContainer.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.dataset.value === value);
             });
+            
+            this.element.dispatchEvent(new CustomEvent('change', { 
+                bubbles: true,
+                detail: { value: value }
+            }));
         }
         
-        // Function to render dropdown options
-        function renderDropdownOptions(filter = "") {
-            dropdown.innerHTML = "";
-            
-            // Show message if max tags reached
-            if (selectedTags.length >= maxTags) {
-                const maxMessage = document.createElement("div");
-                maxMessage.className = "no-results";
-                maxMessage.textContent = `Maximum ${maxTags} tags allowed`;
-                dropdown.appendChild(maxMessage);
-                return;
-            }
-            
-            const availableOptions = options.filter(opt => 
-                !selectedTags.includes(opt) && 
-                opt.toLowerCase().includes(filter.toLowerCase())
-            );
-            
-            if (availableOptions.length === 0 && filter.trim() === "") {
-                const noResults = document.createElement("div");
-                noResults.className = "no-results";
-                noResults.textContent = "No options available";
-                dropdown.appendChild(noResults);
-                return;
-            }
-            
-            // Show custom tag option if input doesn't match any existing option
-            if (filter.trim() !== "" && 
-                !options.includes(filter.trim()) && 
-                !selectedTags.includes(filter.trim())) {
-                const customItem = document.createElement("div");
-                customItem.className = "option custom-option";
-                customItem.innerHTML = `<i class="ri-add-line"></i> Add "${filter.trim()}"`;
-                customItem.dataset.value = filter.trim();
+        bindEvents() {
+            this.control.addEventListener('click', (e) => {
+                e.stopPropagation();
                 
-                customItem.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    if (selectedTags.length < maxTags) {
-                        selectedTags.push(filter.trim());
-                        renderTags();
-                        renderDropdownOptions();
-                        input.value = "";
-                        input.focus();
-                        
-                        // Trigger change event
-                        const changeEvent = new Event('change', { bubbles: true });
-                        select.dispatchEvent(changeEvent);
-                    }
-                    closeAllDropdowns();
-                });
+                if (this.element.classList.contains('disabled')) return;
                 
-                dropdown.appendChild(customItem);
-            }
-            
-            availableOptions.forEach(opt => {
-                const item = document.createElement("div");
-                item.className = "option";
-                item.textContent = opt;
-                item.dataset.value = opt;
+                closeAllDropdowns(this.dropdown);
                 
-                item.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    if (selectedTags.length < maxTags && !selectedTags.includes(opt)) {
-                        selectedTags.push(opt);
-                        renderTags();
-                        renderDropdownOptions();
-                        input.value = "";
-                        input.focus();
-                        
-                        // Trigger change event
-                        const changeEvent = new Event('change', { bubbles: true });
-                        select.dispatchEvent(changeEvent);
-                    }
-                    closeAllDropdowns();
-                });
-                
-                dropdown.appendChild(item);
-            });
-        }
-        
-        // Append dropdown and initialize
-        select.appendChild(dropdown);
-        renderTags();
-        renderDropdownOptions();
-        
-        // Focus and show dropdown on input click
-        input.addEventListener("click", (e) => {
-            e.stopPropagation();
-            closeAllDropdowns(select);
-            select.classList.add("focused");
-            dropdown.classList.add("show");
-            renderDropdownOptions();
-        });
-        
-        // Filter options on input
-        input.addEventListener("input", (e) => {
-            renderDropdownOptions(e.target.value);
-            dropdown.classList.add("show");
-        });
-        
-        // Add tag on Enter
-        input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && input.value.trim()) {
-                e.preventDefault();
-                const newTag = input.value.trim();
-                if (selectedTags.length >= maxTags) {
-                    alert(`Maximum ${maxTags} tags allowed`);
-                    return;
-                }
-                if (newTag && !selectedTags.includes(newTag)) {
-                    selectedTags.push(newTag);
-                    renderTags();
-                    renderDropdownOptions();
-                    input.value = "";
+                if (!this.dropdown.classList.contains('show')) {
+                    // Hitung posisi sebelum menampilkan
+                    positionDropdown(this.dropdown, this.control);
                     
-                    // Trigger change event
-                    const changeEvent = new Event('change', { bubbles: true });
-                    select.dispatchEvent(changeEvent);
-                }
-            }
-            
-            if (e.key === "Escape") {
-                closeAllDropdowns();
-            }
-            
-            // Backspace to remove last tag
-            if (e.key === "Backspace" && input.value === "" && selectedTags.length > 0) {
-                selectedTags.pop();
-                renderTags();
-                renderDropdownOptions();
-                
-                // Trigger change event
-                const changeEvent = new Event('change', { bubbles: true });
-                select.dispatchEvent(changeEvent);
-            }
-        });
-        
-        // Remove focus class when clicking outside
-        input.addEventListener("blur", () => {
-            setTimeout(() => {
-                if (!select.contains(document.activeElement)) {
-                    select.classList.remove("focused");
-                }
-            }, 100);
-        });
-    });
-    
-    /* ===============================
-       HELPER FUNCTIONS
-    =============================== */
-    
-    function closeAllDropdowns(except = null) {
-        // Close all basic dropdowns
-        document.querySelectorAll(".basic-dropdown.show").forEach(dropdown => {
-            const parent = dropdown.closest(".basic-select");
-            if (except !== parent) {
-                dropdown.classList.remove("show");
-                if (parent) parent.classList.remove("open");
-            }
-        });
-        
-        // Close all tag dropdowns
-        document.querySelectorAll(".tag-dropdown.show").forEach(dropdown => {
-            const parent = dropdown.closest(".tag-select");
-            if (except !== parent) {
-                dropdown.classList.remove("show");
-                if (parent) parent.classList.remove("focused");
-            }
-        });
-        
-        // Hide mobile overlay
-        const overlay = document.querySelector(".select-overlay");
-        if (overlay) overlay.classList.remove("show");
-    }
-    
-    // Close dropdowns when clicking outside
-    document.addEventListener("click", (e) => {
-        if (!e.target.closest(".basic-select") && 
-            !e.target.closest(".tag-select") &&
-            !e.target.closest(".select-overlay")) {
-            closeAllDropdowns();
-        }
-    });
-    
-    // Close with Escape key
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            closeAllDropdowns();
-        }
-    });
-    
-    /* ===============================
-       MOBILE RESPONSIVE HANDLING
-    =============================== */
-    function setupMobileResponsive() {
-        if (window.innerWidth <= 768) {
-            // Create mobile overlay
-            let overlay = document.querySelector(".select-overlay");
-            if (!overlay) {
-                overlay = document.createElement("div");
-                overlay.className = "select-overlay";
-                document.body.appendChild(overlay);
-                
-                overlay.addEventListener("click", () => {
-                    closeAllDropdowns();
-                });
-            }
-            
-            // Show overlay when dropdown opens
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'attributes' && 
-                        (mutation.attributeName === 'class')) {
-                        if (mutation.target.classList.contains('show')) {
+                    // Tampilkan dropdown
+                    this.dropdown.classList.add('show');
+                    this.element.classList.add('open');
+                    
+                    // Focus ke search input
+                    const searchInput = this.dropdown.querySelector('.dropdown-search input');
+                    setTimeout(() => {
+                        searchInput.focus();
+                        searchInput.value = '';
+                        this.renderOptions();
+                    }, 10);
+                    
+                    activeDropdown = this.dropdown;
+                    activeTrigger = this.control;
+                    
+                    // Tampilkan overlay di mobile
+                    if (window.innerWidth <= 768) {
+                        const overlay = document.querySelector('.select-overlay');
+                        if (overlay) {
                             overlay.classList.add('show');
                         }
                     }
-                });
+                } else {
+                    this.dropdown.classList.remove('show');
+                    this.element.classList.remove('open');
+                }
             });
             
-            // Observe dropdowns for changes
-            document.querySelectorAll('.basic-dropdown, .tag-dropdown').forEach(dropdown => {
-                observer.observe(dropdown, { attributes: true });
+            const searchInput = this.dropdown.querySelector('.dropdown-search input');
+            searchInput.addEventListener('input', (e) => {
+                this.renderOptions(e.target.value);
             });
             
-        } else {
-            // Remove mobile overlay on desktop
-            const overlay = document.querySelector(".select-overlay");
-            if (overlay) overlay.classList.remove("show");
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+            });
         }
     }
-    
-    // Initialize responsive behavior
-    setupMobileResponsive();
-    window.addEventListener("resize", setupMobileResponsive);
-    
-    /* ===============================
-       PUBLIC API
-    =============================== */
-    window.TechAreaSelect2 = {
-        // Get selected value from basic select
-        getBasicValue: (selector) => {
-            const select = document.querySelector(selector);
-            if (!select) return null;
-            const input = select.querySelector('input');
-            return input ? input.value : '';
-        },
+
+    class TagSelect {
+        constructor(element) {
+            this.element = element;
+            this.input = element.querySelector('input');
+            this.options = element.dataset.options?.split(',').map(o => o.trim()) || [];
+            this.maxTags = parseInt(element.dataset.max) || Infinity;
+            this.selectedTags = [];
+            this.dropdown = null;
+            this.init();
+        }
         
-        // Get selected tags from tag select
-        getTagValues: (selector) => {
-            const select = document.querySelector(selector);
-            if (!select) return [];
-            const tags = select.querySelectorAll('.tag:not(:has(input))');
-            return Array.from(tags).map(tag => {
-                return tag.textContent.replace('×', '').trim();
+        init() {
+            const oldDropdown = this.element.querySelector('.tag-dropdown');
+            if (oldDropdown) oldDropdown.remove();
+            
+            document.querySelectorAll('.tag').forEach(tag => tag.remove());
+            
+            this.createDropdown();
+            this.bindEvents();
+        }
+        
+        createDropdown() {
+            this.dropdown = document.createElement('div');
+            this.dropdown.className = 'tag-dropdown';
+            this.dropdown.style.zIndex = '999999';
+            
+            this.optionsContainer = document.createElement('div');
+            this.optionsContainer.className = 'dropdown-options';
+            this.dropdown.appendChild(this.optionsContainer);
+            
+            document.body.appendChild(this.dropdown);
+        }
+        
+        renderTags() {
+            this.element.querySelectorAll('.tag').forEach(tag => tag.remove());
+            
+            this.selectedTags.forEach(tag => {
+                const tagEl = document.createElement('span');
+                tagEl.className = `tag ${this.getTagVariant()}`;
+                tagEl.innerHTML = `${tag}<span class="remove">&times;</span>`;
+                
+                tagEl.querySelector('.remove').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeTag(tag);
+                });
+                
+                this.element.insertBefore(tagEl, this.input);
             });
+        }
+        
+        getTagVariant() {
+            if (this.element.classList.contains('primary')) return 'primary';
+            if (this.element.classList.contains('success')) return 'success';
+            if (this.element.classList.contains('warning')) return 'warning';
+            if (this.element.classList.contains('danger')) return 'danger';
+            if (this.element.classList.contains('info')) return 'info';
+            return 'gray';
+        }
+        
+        renderOptions(filter = '') {
+            this.optionsContainer.innerHTML = '';
+            
+            if (this.selectedTags.length >= this.maxTags) {
+                const empty = document.createElement('div');
+                empty.className = 'dropdown-empty';
+                empty.textContent = `Maximum ${this.maxTags} tags allowed`;
+                this.optionsContainer.appendChild(empty);
+                return;
+            }
+            
+            const available = this.options.filter(opt => 
+                !this.selectedTags.includes(opt) && 
+                opt.toLowerCase().includes(filter.toLowerCase())
+            );
+            
+            if (available.length === 0 && filter.trim() === '') {
+                const empty = document.createElement('div');
+                empty.className = 'dropdown-empty';
+                empty.textContent = 'No options available';
+                this.optionsContainer.appendChild(empty);
+                return;
+            }
+            
+            if (filter.trim() && !this.options.includes(filter.trim())) {
+                const custom = document.createElement('div');
+                custom.className = 'dropdown-option custom';
+                custom.innerHTML = `<i class="ri-add-line"></i> Add "${filter.trim()}"`;
+                custom.dataset.value = filter.trim();
+                
+                custom.addEventListener('click', () => {
+                    this.addTag(filter.trim());
+                    closeAllDropdowns();
+                });
+                
+                this.optionsContainer.appendChild(custom);
+            }
+            
+            available.forEach(opt => {
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                option.textContent = opt;
+                option.dataset.value = opt;
+                
+                option.addEventListener('click', () => {
+                    this.addTag(opt);
+                    closeAllDropdowns();
+                });
+                
+                this.optionsContainer.appendChild(option);
+            });
+        }
+        
+        addTag(tag) {
+            if (this.selectedTags.length >= this.maxTags) {
+                alert(`Maximum ${this.maxTags} tags allowed`);
+                return;
+            }
+            
+            if (!this.selectedTags.includes(tag)) {
+                this.selectedTags.push(tag);
+                this.renderTags();
+                this.input.value = '';
+                
+                this.element.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    detail: { tags: this.selectedTags }
+                }));
+            }
+        }
+        
+        removeTag(tag) {
+            this.selectedTags = this.selectedTags.filter(t => t !== tag);
+            this.renderTags();
+            
+            this.element.dispatchEvent(new CustomEvent('change', {
+                bubbles: true,
+                detail: { tags: this.selectedTags }
+            }));
+        }
+        
+        bindEvents() {
+            this.input.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeAllDropdowns(this.dropdown);
+                
+                positionDropdown(this.dropdown, this.element);
+                this.dropdown.classList.add('show');
+                this.element.classList.add('focused');
+                this.renderOptions();
+                
+                activeDropdown = this.dropdown;
+                activeTrigger = this.element;
+                
+                // Tampilkan overlay di mobile
+                if (window.innerWidth <= 768) {
+                    const overlay = document.querySelector('.select-overlay');
+                    if (overlay) {
+                        overlay.classList.add('show');
+                    }
+                }
+            });
+            
+            this.input.addEventListener('input', (e) => {
+                if (this.dropdown.classList.contains('show')) {
+                    positionDropdown(this.dropdown, this.element);
+                    this.renderOptions(e.target.value);
+                }
+            });
+            
+            this.input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && this.input.value.trim()) {
+                    e.preventDefault();
+                    this.addTag(this.input.value.trim());
+                }
+                
+                if (e.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+                
+                if (e.key === 'Backspace' && this.input.value === '' && this.selectedTags.length > 0) {
+                    this.selectedTags.pop();
+                    this.renderTags();
+                }
+            });
+            
+            this.input.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (!this.element.contains(document.activeElement)) {
+                        this.element.classList.remove('focused');
+                    }
+                }, 100);
+            });
+        }
+    }
+
+    const init = () => {
+        document.querySelectorAll('.basic-select:not([data-initialized])').forEach(el => {
+            el.setAttribute('data-initialized', 'true');
+            new BasicSelect(el);
+        });
+        
+        document.querySelectorAll('.tag-select:not([data-initialized])').forEach(el => {
+            el.setAttribute('data-initialized', 'true');
+            new TagSelect(el);
+        });
+    };
+
+    // Tutup dropdown ketika klik di luar
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.basic-select') && 
+            !e.target.closest('.tag-select') &&
+            !e.target.closest('.basic-dropdown') &&
+            !e.target.closest('.tag-dropdown')) {
+            closeAllDropdowns();
+        }
+    });
+
+    // Update posisi dropdown saat scroll
+    window.addEventListener('scroll', () => {
+        if (activeDropdown && activeTrigger) {
+            positionDropdown(activeDropdown, activeTrigger);
+        }
+    }, { passive: true });
+
+    // Update posisi dropdown saat resize
+    window.addEventListener('resize', () => {
+        if (activeDropdown && activeTrigger) {
+            positionDropdown(activeDropdown, activeTrigger);
+        }
+    });
+
+    // Tutup dengan tombol ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeAllDropdowns();
+        }
+    });
+
+    // Setup overlay untuk mobile
+    const setupMobileOverlay = () => {
+        let overlay = document.querySelector('.select-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'select-overlay';
+            overlay.style.zIndex = '999998';
+            document.body.appendChild(overlay);
+            
+            overlay.addEventListener('click', closeAllDropdowns);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            setupMobileOverlay();
+        });
+    } else {
+        init();
+        setupMobileOverlay();
+    }
+
+    window.TechAreaSelect2 = {
+        getBasicValue: (selector) => {
+            const el = document.querySelector(selector);
+            return el?.querySelector('input')?.value || '';
         },
         
-        // Set value for basic select
+        getTagValues: (selector) => {
+            const el = document.querySelector(selector);
+            if (!el) return [];
+            return Array.from(el.querySelectorAll('.tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
+        },
+        
         setBasicValue: (selector, value) => {
-            const select = document.querySelector(selector);
-            if (!select) return false;
-            const input = select.querySelector('input');
-            if (input) {
-                input.value = value;
+            const el = document.querySelector(selector);
+            const instance = el?.__selectInstance;
+            if (instance && instance.selectOption) {
+                instance.selectOption(value);
                 return true;
             }
             return false;
         },
         
-        // Clear all tags
         clearTags: (selector) => {
-            const select = document.querySelector(selector);
-            if (!select) return false;
-            const tags = select.querySelectorAll('.tag:not(:has(input))');
-            tags.forEach(tag => tag.remove());
-            return true;
-        },
-        
-        // Add tag to tag select
-        addTag: (selector, tag) => {
-            const select = document.querySelector(selector);
-            if (!select) return false;
-            
-            const input = select.querySelector('input');
-            if (!input) return false;
-            
-            // Simulate adding tag
-            const tagEl = document.createElement("span");
-            tagEl.className = "tag";
-            tagEl.innerHTML = `${tag}<span class="remove">&times;</span>`;
-            
-            // Add remove event
-            tagEl.querySelector(".remove").addEventListener("click", (e) => {
-                e.stopPropagation();
-                tagEl.remove();
-            });
-            
-            select.insertBefore(tagEl, input);
-            return true;
+            const el = document.querySelector(selector);
+            const instance = el?.__selectInstance;
+            if (instance) {
+                instance.selectedTags = [];
+                instance.renderTags();
+                return true;
+            }
+            return false;
         }
     };
+
+})();
+
+/* 
+===========================================
+SELECT2 FORM HANDLER - TECHAREA PRODUCTION
+===========================================
+Description: Form handling functions for Select2 components
+*/
+
+// Function to show notification
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 999999; min-width: 350px; box-shadow: var(--shadow-lg);';
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="ri-${type === 'success' ? 'checkbox-circle' : 'information'}-line me-2 fs-5"></i>
+            <div class="flex-grow-1">${message}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
     
-    console.log("Select2 components initialized successfully!");
-});
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 5000);
+}
+
+// Function to collect all select values
+function collectFormData() {
+    const data = {
+        // Basic Selects
+        country: document.querySelectorAll('.basic-select')[0]?.querySelector('input')?.value || '',
+        category: document.querySelectorAll('.basic-select')[1]?.querySelector('input')?.value || '',
+        city: document.querySelectorAll('.basic-select')[2]?.querySelector('input')?.value || '',
+        disabled: document.querySelectorAll('.basic-select')[3]?.querySelector('input')?.value || '',
+        
+        // Tag Selects - Bagian 2
+        multipleCountries: Array.from(document.querySelectorAll('.tag-select.primary')[0]?.querySelectorAll('.tag') || []).map(t => t.textContent.replace('×', '').trim()),
+        colors: Array.from(document.querySelectorAll('.tag-select.primary')[1]?.querySelectorAll('.tag') || []).map(t => t.textContent.replace('×', '').trim()),
+        frameworks: Array.from(document.querySelectorAll('.tag-select.success')[0]?.querySelectorAll('.tag') || []).map(t => t.textContent.replace('×', '').trim()),
+        languages: Array.from(document.querySelectorAll('.tag-select.success')[1]?.querySelectorAll('.tag') || []).map(t => t.textContent.replace('×', '').trim()),
+        
+        // Tag Selects - Bagian 3
+        skills: Array.from(document.querySelectorAll('.tag-select.danger')[0]?.querySelectorAll('.tag') || []).map(t => t.textContent.replace('×', '').trim()),
+        technologies: Array.from(document.querySelectorAll('.tag-select.info')[0]?.querySelectorAll('.tag') || []).map(t => t.textContent.replace('×', '').trim()),
+        framework2: document.querySelectorAll('.basic-select')[4]?.querySelector('input')?.value || '',
+        menuItems: document.querySelectorAll('.basic-select')[5]?.querySelector('input')?.value || ''
+    };
+    
+    return data;
+}
+
+// Submit form function
+function submitForm() {
+    const formData = collectFormData();
+    
+    // Count selected items
+    let totalSelected = 0;
+    for (let key in formData) {
+        if (Array.isArray(formData[key])) {
+            totalSelected += formData[key].length;
+        } else if (formData[key] && formData[key] !== '') {
+            totalSelected++;
+        }
+    }
+    
+    // Log to console
+    console.log('=== SELECT2 FORM SUBMISSION ===');
+    console.log('Form Data:', formData);
+    console.log('Total selections:', totalSelected);
+    console.log('===============================');
+    
+    // Show success notification
+    showNotification(`Form submitted successfully! Total ${totalSelected} items selected. Check console for details.`, 'success');
+    
+    return false;
+}
+
+// Reset all selects function
+function resetAllSelects() {
+    document.querySelectorAll('.basic-select input').forEach(input => {
+        input.value = '';
+    });
+    
+    document.querySelectorAll('.tag-select .tag').forEach(tag => {
+        tag.remove();
+    });
+    
+    document.querySelectorAll('.basic-select, .tag-select').forEach(el => {
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    
+    showNotification('All selections have been reset', 'info');
+}
+
+// Initialize form handlers
+function initSelect2Form() {
+    // Reset button
+    const resetBtn = document.getElementById('resetAll');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetAllSelects);
+    }
+    
+    // Form submission
+    const form = document.getElementById('select2Form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitForm();
+        });
+    }
+    
+    console.log('Select2 Form Handler initialized');
+}
+
+// Run when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSelect2Form);
+} else {
+    initSelect2Form();
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select2 - TechArea Production Dashboard</title>
+    <title>Select2 Professional - TechArea Production Dashboard</title>
 
     <!-- Font Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +21,95 @@
     
     <!-- Select2 Custom CSS -->
     <link rel="stylesheet" href="assets/libs/select2/css/select2.css">
+
+    <!-- CSS KHUSUS UNTUK PERBAIKAN -->
+    <style>
+        /* 1. PERBAIKAN UKURAN KOTAK - buat semua select sama tinggi */
+        .basic-control,
+        .tag-select {
+            min-height: 3.25rem !important;
+            height: auto !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Basic select dan tag select jadi sama */
+        .basic-select,
+        .tag-select {
+            width: 100% !important;
+        }
+        
+        /* 2. PERBAIKAN DROPDOWN YANG KETUTUP CARD */
+        /* Pastikan semua container tidak memotong */
+        .dashboard-content {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            height: calc(100vh - var(--header-height)) !important;
+            padding-bottom: 50px !important;
+        }
+        
+        .card {
+            overflow: visible !important;
+            margin-bottom: 50px !important;
+        }
+        
+        .card-body {
+            overflow: visible !important;
+            padding-bottom: 40px !important;
+        }
+        
+        /* Z-index untuk dropdown */
+        .basic-dropdown,
+        .tag-dropdown {
+            z-index: 999999 !important;
+        }
+        
+        /* Pastikan wrapper tidak motong */
+        .select-wrapper {
+            overflow: visible !important;
+            position: relative !important;
+            z-index: auto !important;
+        }
+        
+        /* Bagian 3 specific fix */
+        .row > .col-md-6 {
+            overflow: visible !important;
+        }
+        
+        /* Fix untuk card footer/biar dropdown muncul di atas */
+        .card:last-child {
+            margin-bottom: 100px !important;
+        }
+
+        /* Style untuk card title seperti di forms */
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            font-size: 1.3rem;
+        }
+
+        .card-title .text-success {
+            color: var(--success-color);
+        }
+
+        .card-title .text-warning {
+            color: var(--warning-color);
+        }
+
+        .card-title .text-info {
+            color: var(--info-color);
+        }
+
+        .card-title .text-danger {
+            color: var(--danger-color);
+        }
+    </style>
 </head>
 <body>
     <!-- Dashboard Container -->
@@ -62,8 +151,9 @@
                     <span class="menu-text">Datatables</span>
                 </a>
 
-                <a href="select2.html" class="menu-item active" data-menu="analytics">
-                    <i class="ri-list-unordered icon-fixed-size"></i>
+                <!-- Select2 Menu Item - TERPISAH dari Forms -->
+                <a href="select2.html" class="menu-item active" data-menu="select2">
+                    <i class="ri-list-check icon-fixed-size"></i>
                     <span class="menu-text">Select2</span>
                 </a>
                 
@@ -204,8 +294,8 @@
             <!-- Page Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="text-3xl font-weight-bold text-dark mb-1">Select2</h1>
-                    <p class="text-muted">Advanced select boxes with searching, tagging, and remote data support</p>
+                    <h1 class="text-3xl font-weight-bold text-dark mb-1">Select2 Components</h1>
+                    <p class="text-muted">All select types in one card - Basic Select, Multi-Select with Tags, and Advanced Tags</p>
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent p-0">
@@ -215,221 +305,174 @@
                 </nav>
             </div>
             
-            <!-- Alert System Example -->
-            <div class="alert alert-info d-flex align-items-center mb-4">
-                <i class="ri-information-line me-3 icon-fixed-size"></i>
-                <div>
-                    <strong>Select2 System:</strong> Enhanced select boxes with search, multi-select, tagging, and AJAX support.
-                </div>
-            </div>
-            
-            <!-- Select2 Examples Grid -->
-            <div class="row">
-                <!-- Basic Select2 Example -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="ri-arrow-down-circle-line me-2"></i> Basic Select2
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label">Single Selection</label>
-                                <div class="basic-select" data-options="Indonesia,Malaysia,Singapore,Thailand,Vietnam,Philippines,United States,United Kingdom,Japan,South Korea">
-                                    <div class="basic-control">
-                                        <input type="text" placeholder="Select a country" readonly>
-                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">With Placeholder</label>
-                                <div class="basic-select" data-options="Option 1,Option 2,Option 3,Option 4,Option 5">
-                                    <div class="basic-control">
-                                        <input type="text" placeholder="Select an option" readonly>
-                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Disabled Select2</label>
-                                <div class="basic-select" data-options="Disabled Option 1,Disabled Option 2,Disabled Option 3">
-                                    <div class="basic-control" style="opacity: 0.6; cursor: not-allowed;">
-                                        <input type="text" placeholder="Disabled select" readonly disabled>
-                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- SATU CARD DENGAN 3 BAGIAN -->
+            <div class="card">
                 
-                <!-- Multiple Select Example -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="ri-checkbox-multiple-line me-2"></i> Multiple Selection
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label">Multiple Selection (Standard)</label>
-                                <div class="tag-select primary" data-options="Indonesia,Malaysia,Singapore,Thailand,Vietnam,Philippines,United States,United Kingdom,Japan,South Korea">
-                                    <input type="text" placeholder="Select multiple countries">
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Multiple with Maximum Selection</label>
-                                <div class="tag-select success" data-options="React,Vue.js,Angular,Svelte,Next.js,Nuxt.js,Laravel,Django,Spring Boot,Express.js" data-max="3">
-                                    <input type="text" placeholder="Select up to 3 frameworks">
-                                </div>
-                                <small class="text-muted">Maximum 3 selections allowed</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tags Input Example -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="ri-price-tag-3-line me-2"></i> Tags Input
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label">Basic Tags</label>
-                                <div class="tag-select gray" data-options="Red,Blue,Green,Yellow,Purple,Orange">
-                                    <input type="text" placeholder="Type and press enter to add tags">
-                                </div>
-                                <small class="text-muted">Type and press enter to add new tags</small>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Tags with Preset Values</label>
-                                <div class="tag-select info" data-options="JavaScript,Python,Java,PHP,Ruby,Go,Rust,Swift">
-                                    <input type="text" placeholder="Add programming languages">
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Tags with Maximum Items</label>
-                                <div class="tag-select danger" data-options="Frontend,Backend,DevOps,Mobile,Database,Cloud,AI/ML" data-max="5">
-                                    <input type="text" placeholder="Select up to 5 skills">
-                                </div>
-                                <small class="text-muted">Maximum 5 tags allowed</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Advanced Features -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="ri-settings-3-line me-2"></i> Advanced Features
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label">With Clear Button</label>
-                                <div class="basic-select" data-options="Jakarta,Bandung,Surabaya,Yogyakarta,Bali,Medan">
-                                    <div class="basic-control">
-                                        <input type="text" placeholder="Select a city" readonly>
-                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Grouped Options</label>
-                                <div class="basic-select" data-options="React,Vue.js,Angular,Svelte,Node.js,Laravel,Django,Spring Boot,React Native,Flutter,Kotlin,Swift">
-                                    <div class="basic-control">
-                                        <input type="text" placeholder="Select a framework" readonly>
-                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">With Icons</label>
-                                <div class="basic-select" data-options="Dashboard,Users,Settings,Analytics,Reports,Calendar">
-                                    <div class="basic-control">
-                                        <input type="text" placeholder="Select an icon" readonly>
-                                        <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Form Integration -->
-                <div class="col-12 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="ri-layout-line me-2"></i> Form Integration Example
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <form id="select2Form">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Country</label>
-                                        <div class="basic-select" data-options="Indonesia,Malaysia,Singapore,Thailand">
-                                            <div class="basic-control">
-                                                <input type="text" name="country" placeholder="Select your country" readonly required>
-                                                <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                            </div>
+                <div class="card-body">
+                    
+                    <!-- BAGIAN 1: Basic Select with Search -->
+                    <div class="mb-5">
+                        <h5 class="card-title mb-3">
+                            <i class="ri-search-line me-2"></i> 1. Basic Select with Search
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="select-wrapper">
+                                    <label class="form-label">Country</label>
+                                    <div class="basic-select" data-options="Indonesia, Malaysia, Singapore, Thailand, Vietnam, Philippines, United States, United Kingdom, Japan, South Korea, Australia, Germany, France, Italy, Spain, Netherlands, Canada, Brazil, India, China">
+                                        <div class="basic-control">
+                                            <input type="text" placeholder="Select your country..." readonly>
+                                            <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
                                         </div>
                                     </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Skills</label>
-                                        <div class="tag-select primary" data-options="HTML,CSS,JavaScript,React,Vue.js,Node.js,Python,PHP">
-                                            <input type="text" name="skills" placeholder="Add your skills" required>
+                                </div>
+                                
+                                <div class="select-wrapper">
+                                    <label class="form-label">Category</label>
+                                    <div class="basic-select" data-options="Technology, Business, Marketing, Design, Development, Finance, Healthcare, Education, Entertainment, Sports, Travel, Food">
+                                        <div class="basic-control">
+                                            <input type="text" placeholder="Choose category..." readonly>
+                                            <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Tags</label>
-                                        <div class="tag-select info" data-options="Web Development,Mobile Development,DevOps,UI/UX Design,Database Management">
-                                            <input type="text" name="tags" placeholder="Add tags">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Framework</label>
-                                        <div class="basic-select" data-options="React,Vue.js,Angular,Laravel,Django">
-                                            <div class="basic-control">
-                                                <input type="text" name="framework" placeholder="Select a framework" readonly>
-                                                <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="ri-save-line me-2"></i> Submit Form
-                                        </button>
-                                        <button type="button" class="btn btn-outline-secondary" id="resetForm">
-                                            <i class="ri-refresh-line me-2"></i> Reset
-                                        </button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="select-wrapper">
+                                    <label class="form-label">City</label>
+                                    <div class="basic-select" data-options="Jakarta, Surabaya, Bandung, Medan, Semarang, Makassar, Palembang, Yogyakarta, Denpasar, Balikpapan">
+                                        <div class="basic-control">
+                                            <input type="text" placeholder="Choose a city..." readonly>
+                                            <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="select-wrapper">
+                                    <label class="form-label">Disabled State</label>
+                                    <div class="basic-select disabled" data-options="Option 1, Option 2">
+                                        <div class="basic-control">
+                                            <input type="text" placeholder="Disabled select" readonly disabled>
+                                            <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- BAGIAN 2: Multi-Select with Tags -->
+                    <div class="mb-5">
+                        <h5 class="card-title mb-3">
+                            <i class="ri-price-tag-3-line me-2 text-success"></i> 2. Multi-Select with Tags
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="select-wrapper">
+                                    <label class="form-label">Multiple Countries</label>
+                                    <div class="tag-select primary" data-options="Indonesia, Malaysia, Singapore, Thailand, Vietnam, Philippines, United States, United Kingdom, Japan, South Korea, Australia, Germany, France">
+                                        <input type="text" placeholder="Type to add countries...">
+                                    </div>
+                                </div>
+                                
+                                <div class="select-wrapper">
+                                    <label class="form-label">Colors (Primary)</label>
+                                    <div class="tag-select primary" data-options="Red, Blue, Green, Yellow, Purple, Orange, Pink, Brown, Cyan, Magenta, Teal, Lavender">
+                                        <input type="text" placeholder="Type and press enter...">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="select-wrapper">
+                                    <label class="form-label">Frameworks (Max 3)</label>
+                                    <div class="tag-select success" data-options="React, Vue.js, Angular, Svelte, Next.js, Nuxt.js, Laravel, Django, Spring Boot, Express.js, Ruby on Rails, Flask" data-max="3">
+                                        <input type="text" placeholder="Choose up to 3...">
+                                    </div>
+                                </div>
+                                
+                                <div class="select-wrapper">
+                                    <label class="form-label">Languages (Max 3)</label>
+                                    <div class="tag-select success" data-options="JavaScript, Python, Java, PHP, Ruby, Go, Rust, Swift, Kotlin, C++, C#, TypeScript">
+                                        <input type="text" placeholder="Add languages...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- BAGIAN 3: Advanced Tags & Colors -->
+                    <div class="mb-5">
+                        <h5 class="card-title mb-3">
+                            <i class="ri-palette-line me-2 text-warning"></i> 3. Advanced Tags & Colors
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="select-wrapper">
+                                    <label class="form-label">Skills (Max 5)</label>
+                                    <div class="tag-select danger" data-options="Frontend, Backend, DevOps, Mobile, Database, Cloud, AI/ML, UI/UX, Security, Testing, Architecture" data-max="5">
+                                        <input type="text" placeholder="Add up to 5 skills...">
+                                    </div>
+                                </div>
+                                
+                                <div class="select-wrapper">
+                                    <label class="form-label">Technologies</label>
+                                    <div class="tag-select info" data-options="HTML, CSS, JavaScript, TypeScript, Python, Java, PHP, Ruby, Go, Rust, Swift, Kotlin, C#, C++">
+                                        <input type="text" placeholder="Add technologies...">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="select-wrapper">
+                                    <label class="form-label">Frameworks</label>
+                                    <div class="basic-select" data-options="React, Vue.js, Angular, Svelte, Node.js, Laravel, Django, Spring Boot, React Native, Flutter, Kotlin, Swift">
+                                        <div class="basic-control">
+                                            <input type="text" placeholder="Select framework..." readonly>
+                                            <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="select-wrapper">
+                                    <label class="form-label">Menu Items</label>
+                                    <div class="basic-select" data-options="Dashboard, Users, Settings, Analytics, Reports, Calendar, Messages, Notifications, Projects, Teams">
+                                        <div class="basic-control">
+                                            <input type="text" placeholder="Select menu..." readonly>
+                                            <span class="arrow"><i class="ri-arrow-down-s-line"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- FORM ACTIONS -->
+                    <form id="select2Form">
+                        <div class="d-flex gap-3 justify-content-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ri-send-plane-line"></i> Submit Selection
+                            </button>
+                            <button type="button" class="btn btn-outline-primary" id="resetAll">
+                                <i class="ri-refresh-line"></i> Reset All
+                            </button>
+                        </div>
+                        <small class="text-muted d-block text-end mt-3">
+                            <i class="ri-information-line me-1"></i>
+                            Click submit to see selected values in console
+                        </small>
+                    </form>
                 </div>
-                
             </div>
             
         </main>
@@ -441,7 +484,7 @@
     <!-- Custom JavaScript -->
     <script src="assets/js/app.js"></script>
     
-    <!-- Select2 Custom JavaScript -->
+    <!-- Select2 Custom JavaScript (LENGKAP dengan dropdown + form handling) -->
     <script src="assets/libs/select2/js/select2.js"></script>
 </body>
 </html>
