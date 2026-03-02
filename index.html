@@ -19,6 +19,24 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/core.css">
     <link rel="stylesheet" href="assets/css/components.css">
+
+    <!-- Tambahkan CSS ini di bagian head atau file CSS terpisah -->
+<style>
+/* Style untuk membuat efek hover pada logout button */
+.dropdown-item.text-danger:hover {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.dropdown-item.text-danger:hover i {
+    color: white !important;
+}
+
+/* Pastikan icon juga berwarna merah */
+.dropdown-item.text-danger i {
+    color: #dc3545;
+}
+</style>
 </head>
 <body>
     <!-- Dashboard Container -->
@@ -127,71 +145,76 @@
             </div>
         </nav>
         
-        <!-- ==================== HEADER ==================== -->
-        <header class="dashboard-header" id="header">
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="ri-menu-2-line icon-fixed-size"></i>
+<!-- ==================== HEADER ==================== -->
+<header class="dashboard-header" id="header">
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="ri-menu-2-line icon-fixed-size"></i>
+    </button>
+    
+    <div class="header-controls">
+        <!-- Notification Dropdown -->
+        <div class="position-relative">
+            <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                <i class="ri-notification-3-line icon-fixed-size"></i>
             </button>
-            
-            <div class="header-controls">
-                <!-- Notification Dropdown -->
-                <div class="position-relative">
-                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
-                        <i class="ri-notification-3-line icon-fixed-size"></i>
-                    </button>
-                    <span class="notification-badge">3</span>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><span class="dropdown-item-text fw-bold">New notifications</span></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-user-add-line icon-fixed-size icon-fixed-size-sm me-2"></i> New user registered</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-download-line icon-fixed-size icon-fixed-size-sm me-2"></i> Report generated</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-alert-line icon-fixed-size icon-fixed-size-sm me-2"></i> System update</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Settings Dropdown -->
-                <div class="dropdown">
-                    <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
-                        <i class="ri-settings-4-line icon-fixed-size"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-lock-line icon-fixed-size icon-fixed-size-sm me-2"></i> Security</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
-                    </ul>
-                </div>
-                
-                <!-- User Avatar Dropdown -->
-                <div class="dropdown">
-                    <div class="user-avatar cursor-pointer" data-bs-toggle="dropdown">
-                        <img src="assets/img/avatar/no-img.jpeg" alt="User Avatar">
-                    </div>
-                    <div class="avatar-status"></div>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <div class="dropdown-user-header">
-                                <div class="dropdown-user-avatar">
-                                    <img src="assets/img/avatar/no-img.jpeg" alt="Ahmad Rizki">
-                                </div>
-                                <div class="dropdown-user-info">
-                                    <span class="user-name">Ahmad Rizki</span>
-                                    <span class="user-role">Administrator</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> My Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-settings-3-line icon-fixed-size icon-fixed-size-sm me-2"></i> Account Settings</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-shield-keyhole-line icon-fixed-size icon-fixed-size-sm me-2"></i> Privacy</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item logout-item" href="#"><i class="ri-logout-box-r-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
-                    </ul>
-                </div>
+            <span class="notification-badge">3</span>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><span class="dropdown-item-text fw-bold">New notifications</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-user-add-line icon-fixed-size icon-fixed-size-sm me-2"></i> New user registered</a></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-download-line icon-fixed-size icon-fixed-size-sm me-2"></i> Report generated</a></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-alert-line icon-fixed-size icon-fixed-size-sm me-2"></i> System update</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-center" href="#">View all</a></li>
+            </ul>
+        </div>
+        
+        <!-- Settings Dropdown -->
+        <div class="dropdown">
+            <button class="btn p-0 border-0 bg-transparent text-dark" type="button" data-bs-toggle="dropdown">
+                <i class="ri-settings-4-line icon-fixed-size"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-lock-line icon-fixed-size icon-fixed-size-sm me-2"></i> Security</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line icon-fixed-size icon-fixed-size-sm me-2"></i> Logout</a></li>
+            </ul>
+        </div>
+        
+        <!-- User Avatar Dropdown -->
+        <div class="dropdown">
+            <div class="user-avatar cursor-pointer" data-bs-toggle="dropdown">
+                <img src="assets/img/avatar/no-img.jpeg" alt="User Avatar">
             </div>
-        </header>
+            <div class="avatar-status"></div>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <div class="dropdown-user-header">
+                        <div class="dropdown-user-avatar">
+                            <img src="assets/img/avatar/no-img.jpeg" alt="Ahmad Rizki">
+                        </div>
+                        <div class="dropdown-user-info">
+                            <span class="user-name">Ahmad Rizki</span>
+                            <span class="user-role">AhmadRizki@email.com</span>
+                        </div>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-user-line icon-fixed-size icon-fixed-size-sm me-2"></i> My Profile</a></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-settings-3-line icon-fixed-size icon-fixed-size-sm me-2"></i> Account Settings</a></li>
+                <li><a class="dropdown-item" href="#"><i class="ri-shield-keyhole-line icon-fixed-size icon-fixed-size-sm me-2"></i> Privacy</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger fw-bold" href="#">
+                        <i class="ri-logout-box-r-line icon-fixed-size icon-fixed-size-sm me-2 text-danger"></i> 
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
         
         <!-- Mobile Overlay -->
         <div class="overlay" id="overlay"></div>
